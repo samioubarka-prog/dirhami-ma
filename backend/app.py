@@ -648,7 +648,7 @@ def simulate_investissement():
     n = duree * 12
 
     vf_capital = capital_initial * (1 + rendement_annuel)**duree
-    vf_versements = taux_mensuel > 0         ? versement_mensuel * ((1 + taux_mensuel)**n - 1) / taux_mensuel         : versement_mensuel * n
+    vf_versements = versement_mensuel * ((1 + taux_mensuel)**n - 1) / taux_mensuel if taux_mensuel > 0 else versement_mensuel * n
 
     total = vf_capital + vf_versements
     capital_investi = capital_initial + (versement_mensuel * n)
