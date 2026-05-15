@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Simulateur Retraite Maroc 2026 - Dirhami.ma</title>
+    <meta name="description" content="Calculez le capital nécessaire et les versements mensuels pour maintenir votre niveau de vie à la retraite au Maroc.">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> Dirhami<span>.ma</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="comparateur-cartes.html">Cartes</a></li>
+            <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+            <li><a href="simulateur-credit.html">Crédit</a></li>
+            <li><a href="simulateur-retraite.html">Retraite</a></li>
+            <li><a href="simulateur-budget.html">Budget</a></li>
+            <li><a href="regimes-fiscaux.html">Fiscalité</a></li>
+            <li><a href="blog.html">Blog</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    </nav>
+    <div style="padding-top: 90px;">
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-piggy-bank"></i> Planificateur de Retraite</h2>
+                <p>Calculez le capital nécessaire et les versements mensuels pour maintenir votre niveau de vie à la retraite</p>
+            </div>
+            <div class="simulateur-container">
+                <div class="simulateur-header">
+                    <h2>Votre projet de retraite</h2>
+                    <p style="opacity: 0.9;">L'âge légal de départ à la retraite au Maroc est de 63 ans (CNSS/CIMR)</p>
+                </div>
+                <div class="simulateur-body">
+                    <div class="simulateur-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Âge actuel</label>
+                                <input type="number" id="retAgeActuel" value="35" min="18" max="70">
+                            </div>
+                            <div class="form-group">
+                                <label>Âge de départ souhaité</label>
+                                <input type="number" id="retAgeDepart" value="60" min="45" max="75">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Revenu mensuel actuel net (MAD)</label>
+                            <input type="number" id="retRevenu" value="12000" min="2000" step="500">
+                        </div>
+                        <div class="form-group">
+                            <label>Taux de remplacement souhaité (%)</label>
+                            <input type="range" id="retTaux" min="50" max="100" value="70">
+                            <div class="range-value" id="retTauxVal">70%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Rendement attendu de l'épargne (%/an)</label>
+                            <input type="range" id="retRendement" min="3" max="12" value="6" step="0.5">
+                            <div class="range-value" id="retRendementVal">6%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Capital déjà épargné (MAD)</label>
+                            <input type="number" id="retCapital" value="50000" min="0" step="10000">
+                        </div>
+                        <button class="btn btn-primary" id="btnCalculerRetraite">
+                            <i class="fas fa-calculator"></i> Calculer ma retraite
+                        </button>
+                    </div>
+                    <div class="results-panel" id="retResults" style="display:none;">
+                        <div class="result-box highlight">
+                            <div class="result-label">Capital nécessaire</div>
+                            <div class="result-value accent" id="resCapitalNec">0 MAD</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Versement mensuel recommandé</div>
+                            <div class="result-value" id="resVersement">0 MAD</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Besoin mensuel à la retraite</div>
+                            <div class="result-value" id="resBesoin">0 MAD</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Années d'épargne</div>
+                            <div class="result-value" id="resAnnees">0 ans</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Capital projeté</div>
+                            <div class="result-value success" id="resProjete">0 MAD</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="retChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; color: var(--primary); margin-bottom: 1.5rem;">🏛️ Régimes de retraite au Maroc</h3>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-building"></i></div>
+                        <h3>CNSS / CIMR</h3>
+                        <p>Régime de base obligatoire. Pension calculée sur les 96 meilleurs mois de salaire. Complétez avec l'épargne privée.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>PEA Maroc</h3>
+                        <p>Exonération totale d'IR après 5 ans. Plafond 2 000 000 MAD. Idéal pour compléter la retraite en bourse.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Assurance-vie</h3>
+                        <p>Fiscalité avantageuse, transmission facilitée aux bénéficiaires. Rendements 3-6% selon les contrats.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; padding-top: 2rem;">
+            <p>© 2026 Dirhami.ma | Données indicatives</p>
+        </div>
+    </footer>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparateur Cartes Bancaires Maroc 2026 - Dirhami.ma</title>
+    <meta name="description" content="Comparez les frais et avantages des cartes bancaires de 20+ banques au Maroc. Données actualisées 2026.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> Dirhami<span>.ma</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="comparateur-cartes.html">Cartes</a></li>
+            <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+            <li><a href="simulateur-credit.html">Crédit</a></li>
+            <li><a href="simulateur-retraite.html">Retraite</a></li>
+            <li><a href="simulateur-budget.html">Budget</a></li>
+            <li><a href="regimes-fiscaux.html">Fiscalité</a></li>
+            <li><a href="blog.html">Blog</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    </nav>
+
+    <div style="padding-top: 90px;">
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-credit-card"></i> Comparateur de Cartes Bancaires</h2>
+                <p>Comparez les frais, plafonds et avantages des cartes des principales banques au Maroc - Données 2026</p>
+            </div>
+
+            <div class="comparateur-filters">
+                <select id="filtreBanque">
+                    <option value="">Toutes les banques</option>
+                </select>
+                <select id="filtreType">
+                    <option value="">Tous types</option>
+                    <option value="Visa Classic">Visa Classic</option>
+                    <option value="Visa Gold">Visa Gold</option>
+                    <option value="Visa Platinum">Visa Platinum</option>
+                </select>
+                <button class="btn btn-primary btn-sm" id="btnFiltrerCartes"><i class="fas fa-filter"></i> Filtrer</button>
+            </div>
+
+            <div class="table-container">
+                <table id="tableCartes">
+                    <thead>
+                        <tr>
+                            <th>Banque</th>
+                            <th>Carte</th>
+                            <th>Type</th>
+                            <th>Frais/an</th>
+                            <th>Retrait DAB nat.</th>
+                            <th>Retrait int.</th>
+                            <th>Plafond retrait/jour</th>
+                            <th>Plafond paiement/jour</th>
+                            <th>Internet</th>
+                            <th>Assurance</th>
+                            <th>Cashback</th>
+                            <th>Avantages</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">💡 Astuces pour choisir votre carte</h3>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-user"></i></div>
+                        <h3>Usage basique</h3>
+                        <p>Carte Classic suffisante si vous faites peu de retraits et paiements en ligne. Économisez les frais annuels.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-plane"></i></div>
+                        <h3>Voyageurs</h3>
+                        <p>Privilégiez les cartes Gold/Platinum avec assurance voyage et frais de retrait à l'étranger réduits.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <h3>Achats en ligne</h3>
+                        <p>Carte virtuelle ou e-commerce dédiée. Surveillez les plafonds de paiement internet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banques digitales -->
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">📱 Banques digitales au Maroc - Comparatif 2026</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Banque</th><th>Pack mensuel</th><th>Carte</th><th>Virement</th><th>Retrait DAB</th><th>Ouverture</th><th>App mobile</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>CFG Bank</strong></td><td><span class="badge badge-success">0 MAD</span></td><td>Gratuite</td><td>Gratuit</td><td>Gratuit réseau</td><td>100% en ligne</td><td>4.5/5 ⭐</td></tr>
+                            <tr><td><strong>L'bankalik (AWB)</strong></td><td>19 MAD</td><td>Incluse</td><td>Gratuit</td><td>Gratuit réseau</td><td>100% mobile</td><td>4.0/5</td></tr>
+                            <tr><td><strong>CIH Digital</strong></td><td>25 MAD</td><td>Gratuite 1ère année</td><td>Gratuit</td><td>Gratuit réseau</td><td>Semi en ligne</td><td>4.2/5 ⭐</td></tr>
+                            <tr><td><strong>BMCE Direct</strong></td><td>30 MAD</td><td>100 MAD/an</td><td>5 MAD</td><td>Gratuit réseau</td><td>Partiellement</td><td>3.8/5</td></tr>
+                            <tr><td><strong>Banque Populaire</strong></td><td>35 MAD</td><td>120 MAD/an</td><td>Gratuit</td><td>Gratuit réseau</td><td>Agence</td><td>3.5/5</td></tr>
+                            <tr><td><strong>Crédit du Maroc</strong></td><td>30 MAD</td><td>100 MAD/an</td><td>5 MAD</td><td>7 MAD hors réseau</td><td>Agence</td><td>3.5/5</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="text-align: center; color: var(--gray); font-size: 0.85rem; margin-top: 1rem;">
+                    <i class="fas fa-info-circle"></i> CFG Bank se distingue avec zéro frais de tenue de compte. Source : comparatifs banques digitales Maroc 2026
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; padding-top: 2rem;">
+            <p>© 2026 Dirhami.ma | Données indicatives - Vérifiez auprès de votre banque</p>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="js/main.js"></script>
+</body>
+</html>

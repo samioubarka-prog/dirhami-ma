@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Simulateur Investissement Maroc 2026 - Dirhami.ma</title>
+    <meta name="description" content="Projectez la croissance de votre capital selon différents scénarios de rendement au Maroc.">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> Dirhami<span>.ma</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="comparateur-cartes.html">Cartes</a></li>
+            <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+            <li><a href="simulateur-credit.html">Crédit</a></li>
+            <li><a href="simulateur-retraite.html">Retraite</a></li>
+            <li><a href="simulateur-budget.html">Budget</a></li>
+            <li><a href="regimes-fiscaux.html">Fiscalité</a></li>
+            <li><a href="blog.html">Blog</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    </nav>
+    <div style="padding-top: 90px;">
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Simulateur d'Investissement</h2>
+                <p>Projectez la croissance de votre capital selon différents scénarios de rendement</p>
+            </div>
+            <div class="simulateur-container">
+                <div class="simulateur-header">
+                    <h2>Votre projet d'investissement</h2>
+                    <p style="opacity: 0.9;">Effet boule de neige : plus vous commencez tôt, plus vos intérêts composés travaillent pour vous</p>
+                </div>
+                <div class="simulateur-body">
+                    <div class="simulateur-form">
+                        <div class="form-group">
+                            <label>Capital initial (MAD)</label>
+                            <input type="number" id="invCapital" value="50000" min="0" step="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Versement mensuel (MAD)</label>
+                            <input type="number" id="invVersement" value="2000" min="0" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Rendement annuel estimé (%)</label>
+                            <input type="range" id="invRendement" min="3" max="15" value="7" step="0.5">
+                            <div class="range-value" id="invRendementVal">7%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Durée (années)</label>
+                            <input type="range" id="invDuree" min="1" max="30" value="10">
+                            <div class="range-value" id="invDureeVal">10 ans</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Type d'investissement</label>
+                            <select id="invType">
+                                <option value="opcvm">OPCVM / Fonds</option>
+                                <option value="pea">PEA (Actions)</option>
+                                <option value="assurance">Assurance-vie</option>
+                                <option value="immobilier">Immobilier locatif</option>
+                                <option value="mixte">Mixte diversifié</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btnCalculerInvest">
+                            <i class="fas fa-calculator"></i> Calculer la projection
+                        </button>
+                    </div>
+                    <div class="results-panel" id="invResults" style="display:none;">
+                        <div class="result-box highlight">
+                            <div class="result-label">Capital final estimé</div>
+                            <div class="result-value accent" id="resTotal">0 MAD</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Intérêts / Gains composés</div>
+                            <div class="result-value" id="resInterets">0 MAD</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Capital investi</div>
+                            <div class="result-value" id="resCapitalInvesti">0 MAD</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Performance totale</div>
+                            <div class="result-value success" id="resPerformance">0%</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="invChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; color: var(--primary); margin-bottom: 1.5rem;">📊 Scénarios de rendement par type d'investissement</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Type</th><th>Rendement estimé</th><th>Risque</th><th>Liquidité</th><th>Fiscalité</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>OPCVM Monétaire</strong></td><td>3% - 5%</td><td><span class="badge badge-success">Faible</span></td><td>Quotidienne</td><td>20% IR</td></tr>
+                            <tr><td><strong>OPCVM Obligataire</strong></td><td>5% - 8%</td><td><span class="badge badge-success">Faible</span></td><td>Quotidienne</td><td>20% IR</td></tr>
+                            <tr><td><strong>OPCVM Mixte</strong></td><td>7% - 12%</td><td><span class="badge badge-warning">Moyen</span></td><td>Quotidienne</td><td>20% IR</td></tr>
+                            <tr><td><strong>PEA (Actions)</strong></td><td>8% - 15%</td><td><span class="badge badge-warning">Élevé</span></td><td>Quotidienne</td><td>Exonéré après 5 ans</td></tr>
+                            <tr><td><strong>Assurance-vie</strong></td><td>3% - 6%</td><td><span class="badge badge-success">Faible</span></td><td>Dépend du contrat</td><td>Abattement / exonération</td></tr>
+                            <tr><td><strong>Immobilier</strong></td><td>5% - 10%</td><td><span class="badge badge-warning">Moyen</span></td><td>Faible</td><td>RNI / IR</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; padding-top: 2rem;">
+            <p>© 2026 Dirhami.ma | Données indicatives</p>
+        </div>
+    </footer>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Comparateur OPCVM Maroc 2026 - Dirhami.ma</title>
+    <meta name="description" content="Rendements, frais de gestion et performances des fonds d'investissement agréés AMMC au Maroc.">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> Dirhami<span>.ma</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="comparateur-cartes.html">Cartes</a></li>
+            <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+            <li><a href="simulateur-credit.html">Crédit</a></li>
+            <li><a href="simulateur-retraite.html">Retraite</a></li>
+            <li><a href="simulateur-budget.html">Budget</a></li>
+            <li><a href="regimes-fiscaux.html">Fiscalité</a></li>
+            <li><a href="blog.html">Blog</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    </nav>
+    <div style="padding-top: 90px;">
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-pie"></i> Comparateur OPCVM Maroc</h2>
+                <p>Rendements, frais de gestion et performances des fonds d'investissement agréés par l'AMMC - Données 2026</p>
+            </div>
+            <div class="comparateur-filters">
+                <select id="filtreCategorie">
+                    <option value="">Toutes catégories</option>
+                    <option value="Actions">Actions</option>
+                    <option value="Obligataire">Obligataire</option>
+                    <option value="Mixte">Mixte</option>
+                    <option value="Immobilier">Immobilier</option>
+                    <option value="Monétaire">Monétaire</option>
+                </select>
+                <button class="btn btn-primary btn-sm" id="btnFiltrerOPCVM"><i class="fas fa-filter"></i> Filtrer</button>
+            </div>
+            <div class="table-container">
+                <table id="tableOPCVM">
+                    <thead>
+                        <tr>
+                            <th>Nom du fonds</th><th>Catégorie</th><th>Société</th>
+                            <th>Rendement 1 an</th><th>Rendement 3 ans</th>
+                            <th>Frais gestion</th><th>Risque</th><th>Min. invest.</th><th>Actif (MAD)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="chart-container" style="margin-top: 2rem;">
+                <canvas id="opcvmChart"></canvas>
+            </div>
+            <div style="margin-top: 2rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">📊 Performances moyennes par catégorie (2026)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Catégorie</th><th>Rendement moyen 1 an</th><th>Risque</th><th>Liquidité</th><th>Recommandé pour</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Monétaire</strong></td><td>2.7%</td><td><span class="badge badge-success">Très faible</span></td><td>Quotidienne</td><td>Trésorerie de sécurité</td></tr>
+                            <tr><td><strong>Obligataire</strong></td><td>5.2%</td><td><span class="badge badge-success">Faible</span></td><td>Quotidienne</td><td>Revenus réguliers</td></tr>
+                            <tr><td><strong>Mixte</strong></td><td>8.5%</td><td><span class="badge badge-warning">Moyen</span></td><td>Quotidienne</td><td>Équilibre risque/rendement</td></tr>
+                            <tr><td><strong>Actions</strong></td><td>14.5%</td><td><span class="badge badge-danger">Élevé</span></td><td>Quotidienne</td><td>Croissance long terme</td></tr>
+                            <tr><td><strong>Immobilier</strong></td><td>7.8%</td><td><span class="badge badge-warning">Moyen</span></td><td>Mensuelle</td><td>Patrimoine tangible</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; padding-top: 2rem;">
+            <p>© 2026 Dirhami.ma | Données indicatives</p>
+        </div>
+    </footer>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="js/main.js"></script>
+</body>
+</html>

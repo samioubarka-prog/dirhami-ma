@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirhami.ma - Comparez, Simulez, Épargnez | Outils Financiers Maroc</title>
+    <meta name="description" content="Outils gratuits pour comparer les banques, simuler vos crédits, planifier votre retraite et optimiser votre épargne au Maroc. 100% gratuit et indépendant.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-chart-line"></i>
+            Dirhami<span>.ma</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="comparateur-cartes.html">Cartes Bancaires</a></li>
+            <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+            <li><a href="simulateur-credit.html">Crédit</a></li>
+            <li><a href="simulateur-retraite.html">Retraite</a></li>
+            <li><a href="simulateur-budget.html">Budget</a></li>
+            <li><a href="regimes-fiscaux.html">Régimes Fiscaux</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="admin.html" class="nav-cta"><i class="fas fa-lock"></i> Admin</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Maîtrisez votre <span>argent</span> comme un pro</h1>
+                <p>Outils gratuits pour comparer les banques, simuler vos crédits, planifier votre retraite et optimiser votre épargne au Maroc. 100% indépendant.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">Banques comparées</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">OPCVM analysés</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Simulateurs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Gratuit</div>
+                    </div>
+                </div>
+            </div>
+            <div class="email-capture">
+                <h3><i class="fas fa-gift"></i> Guide gratuit</h3>
+                <p>Recevez notre guide "Épargne & Investissement au Maroc 2026" + accès aux alertes taux en temps réel.</p>
+                <form id="leadForm">
+                    <div class="form-group">
+                        <input type="text" id="leadNom" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="leadEmail" placeholder="Votre email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="leadPhone" placeholder="Téléphone (optionnel)">
+                    </div>
+                    <div class="form-group">
+                        <select id="leadObjet">
+                            <option value="">Je suis intéressé par...</option>
+                            <option value="credit">Crédit immobilier</option>
+                            <option value="epargne">Épargne / Investissement</option>
+                            <option value="retraite">Retraite</option>
+                            <option value="banque">Changer de banque</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner" id="leadSpinner"></span>
+                        <span id="leadBtnText">Recevoir le guide gratuit</span>
+                    </button>
+                </form>
+                <div class="trust-badges">
+                    <span><i class="fas fa-shield-alt"></i> Données sécurisées</span>
+                    <span><i class="fas fa-times-circle"></i> Sans engagement</span>
+                    <span><i class="fas fa-users"></i> +2 500 utilisateurs</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Outils Section -->
+    <section class="section">
+        <div class="section-header fade-in">
+            <h2>Nos outils financiers</h2>
+            <p>Tout ce dont vous avez besoin pour prendre les meilleures décisions financières au Maroc</p>
+        </div>
+        <div class="cards-grid">
+            <div class="card fade-in">
+                <div class="card-icon"><i class="fas fa-credit-card"></i></div>
+                <h3>Comparateur de Cartes</h3>
+                <p>Comparez les frais, plafonds et avantages des cartes bancaires des 20+ principales banques au Maroc.</p>
+                <a href="comparateur-cartes.html" class="card-link">Comparer maintenant <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
+                <h3>OPCVM & Fonds</h3>
+                <p>Analysez les rendements, frais de gestion et performances des fonds d'investissement marocains agréés AMMC.</p>
+                <a href="comparateur-opcvm.html" class="card-link">Explorer <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon"><i class="fas fa-home"></i></div>
+                <h3>Crédit Immobilier</h3>
+                <p>Calculez votre mensualité, tableau d'amortissement et capacité d'emprunt. Taux actualisés Avril 2026.</p>
+                <a href="simulateur-credit.html" class="card-link">Simuler <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon"><i class="fas fa-piggy-bank"></i></div>
+                <h3>Plan Retraite</h3>
+                <p>Découvrez combien épargner aujourd'hui pour maintenir votre niveau de vie demain. Projection graphique.</p>
+                <a href="simulateur-retraite.html" class="card-link">Calculer <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon"><i class="fas fa-calculator"></i></div>
+                <h3>Budget & Épargne</h3>
+                <p>Analysez vos dépenses, identifiez les économies possibles et tracez votre plan d'épargne mensuel.</p>
+                <a href="simulateur-budget.html" class="card-link">Analyser <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon"><i class="fas fa-landmark"></i></div>
+                <h3>Régimes Fiscaux</h3>
+                <p>PEA, assurance-vie, déductions fiscales : tout savoir pour payer moins d'impôts légalement au Maroc.</p>
+                <a href="regimes-fiscaux.html" class="card-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section style="background: var(--gradient-hero); padding: 70px 5%;">
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; color: white;">
+            <div>
+                <div style="font-size: 2.8rem; font-weight: 800;">+3,200</div>
+                <div style="opacity: 0.85; font-size: 0.95rem;">Simulations réalisées</div>
+            </div>
+            <div>
+                <div style="font-size: 2.8rem; font-weight: 800;">20+</div>
+                <div style="opacity: 0.85; font-size: 0.95rem;">Banques référencées</div>
+            </div>
+            <div>
+                <div style="font-size: 2.8rem; font-weight: 800;">12</div>
+                <div style="opacity: 0.85; font-size: 0.95rem;">OPCVM analysés</div>
+            </div>
+            <div>
+                <div style="font-size: 2.8rem; font-weight: 800;">100%</div>
+                <div style="opacity: 0.85; font-size: 0.95rem;">Gratuit & Indépendant</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Preview -->
+    <section class="section">
+        <div class="section-header fade-in">
+            <h2>Derniers articles</h2>
+            <p>Conseils et analyses pour mieux gérer votre argent au Maroc</p>
+        </div>
+        <div class="blog-grid" id="blogPreview"></div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+            <a href="blog.html" class="btn btn-secondary btn-sm">Voir tous les articles</a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="background: #edf2f7; padding: 90px 5%;">
+        <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 2.2rem; color: var(--primary); margin-bottom: 1rem; font-weight: 700;">Ne manquez aucune opportunité</h2>
+            <p style="color: var(--gray); margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.7;">Inscrivez-vous pour recevoir les alertes sur les meilleurs taux de crédit, les nouveaux OPCVM performants et les changements fiscaux au Maroc.</p>
+            <form id="ctaForm" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <input type="email" id="ctaEmail" placeholder="Votre email" required style="padding: 0.9rem 1.5rem; border: 2px solid var(--gray-light); border-radius: var(--radius-sm); font-size: 1rem; min-width: 300px; font-family: inherit;">
+                <button type="submit" class="btn btn-primary" style="width: auto;">S'inscrire gratuitement</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3><i class="fas fa-chart-line"></i> Dirhami.ma</h3>
+                <p>La plateforme de référence pour comparer et simuler vos produits financiers au Maroc. 100% gratuite, indépendante et sans conflit d'intérêts.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Outils</h4>
+                <ul>
+                    <li><a href="comparateur-cartes.html"><i class="fas fa-chevron-right"></i> Cartes Bancaires</a></li>
+                    <li><a href="comparateur-opcvm.html"><i class="fas fa-chevron-right"></i> OPCVM</a></li>
+                    <li><a href="simulateur-credit.html"><i class="fas fa-chevron-right"></i> Crédit Immobilier</a></li>
+                    <li><a href="simulateur-retraite.html"><i class="fas fa-chevron-right"></i> Retraite</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Ressources</h4>
+                <ul>
+                    <li><a href="blog.html"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                    <li><a href="regimes-fiscaux.html"><i class="fas fa-chevron-right"></i> Régimes Fiscaux</a></li>
+                    <li><a href="simulateur-budget.html"><i class="fas fa-chevron-right"></i> Budget</a></li>
+                    <li><a href="simulateur-investissement.html"><i class="fas fa-chevron-right"></i> Investissement</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Légal</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Mentions légales</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Confidentialité</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> CGU</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Dirhami.ma. Tous droits réservés. | Données à titre indicatif, vérifiez auprès de votre banque.</p>
+        </div>
+    </footer>
+
+    <!-- Popup Email (style tamra.ma) -->
+    <div class="popup-overlay" id="popupEmail">
+        <div class="popup-box">
+            <button class="popup-close" id="popupClose"><i class="fas fa-times"></i></button>
+            <h3><i class="fas fa-envelope-open-text" style="color: var(--secondary);"></i> Restez informé</h3>
+            <p>Recevez chaque semaine les meilleures opportunités financières au Maroc : taux de crédit, OPCVM performants, et astuces fiscales.</p>
+            <form id="popupForm">
+                <div class="form-group">
+                    <input type="email" id="popupEmailInput" placeholder="Votre email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Je m'inscris</button>
+            </form>
+            <p style="font-size: 0.8rem; color: var(--gray); margin-top: 1rem; text-align: center;"><i class="fas fa-lock"></i> Désinscription à tout moment. Aucun spam.</p>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
