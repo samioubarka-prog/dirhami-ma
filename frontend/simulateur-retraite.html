@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Retraite Maroc 2026 - Dirhami.ma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .simulator-form { background: #f8f9fa; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #2c3e50; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .btn-calculate { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 6px; font-size: 18px; cursor: pointer; width: 100%; }
+        .btn-calculate:hover { background: #219a52; }
+        .results { display: none; background: white; padding: 30px; border-radius: 10px; border: 2px solid #27ae60; margin-top: 20px; }
+        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
+        .result-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
+        .result-card h4 { margin: 0 0 10px 0; color: #7f8c8d; font-size: 14px; }
+        .result-card p { margin: 0; font-size: 24px; font-weight: bold; color: #2c3e50; }
+        .result-card small { color: #7f8c8d; }
+        .evolution-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .evolution-table th { background: #2c3e50; color: white; padding: 10px; }
+        .evolution-table td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+        .alert { padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .alert-warning { background: #fff3cd; color: #856404; }
+        .alert-success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Dirhami.ma</a>
+            <ul class="nav-links">
+                <li><a href="comparateur-cartes.html">Cartes Bancaires</a></li>
+                <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+                <li><a href="simulateur-credit.html">Crédit</a></li>
+                <li><a href="simulateur-retraite.html">Retraite</a></li>
+                <li><a href="simulateur-budget.html">Budget</a></li>
+                <li><a href="regimes-fiscaux.html">Régimes Fiscaux</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 100px;">
+        <h1>Simulateur Retraite Maroc 2026</h1>
+        <p>Calculez combien vous devez épargner pour maintenir votre niveau de vie à la retraite au Maroc</p>
+
+        <div class="simulator-form">
+            <h2>Votre situation actuelle</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Age actuel</label>
+                    <input type="number" id="age-actuel" value="30" min="18" max="65">
+                </div>
+                <div class="form-group">
+                    <label>Age de retraite souhaité</label>
+                    <input type="number" id="age-retraite" value="60" min="50" max="70">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Revenu mensuel actuel (MAD)</label>
+                    <input type="number" id="revenu" value="10000" min="3000" step="500">
+                </div>
+                <div class="form-group">
+                    <label>Taux de remplacement souhaité (%)</label>
+                    <input type="number" id="taux-remplacement" value="70" min="30" max="100" step="5">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Rendement attendu (%/an)</label>
+                    <input type="number" id="rendement" value="6" min="1" max="15" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label>Capital existant (MAD)</label>
+                    <input type="number" id="capital-existant" value="0" min="0" step="10000">
+                </div>
+            </div>
+            <button class="btn-calculate" onclick="calculateRetraite()">Calculer mon épargne retraite</button>
+        </div>
+
+        <div id="results" class="results">
+            <h2>Résultats de votre simulation</h2>
+            <div id="alert-container"></div>
+            <div class="results-grid">
+                <div class="result-card">
+                    <h4>Capital nécessaire</h4>
+                    <p id="res-capital">0 MAD</p>
+                    <small>à la retraite</small>
+                </div>
+                <div class="result-card">
+                    <h4>Versement mensuel</h4>
+                    <p id="res-versement">0 MAD</p>
+                    <small>à épargner</small>
+                </div>
+                <div class="result-card">
+                    <h4>Besoin mensuel</h4>
+                    <p id="res-besoin">0 MAD</p>
+                    <small>à la retraite</small>
+                </div>
+                <div class="result-card">
+                    <h4>Années d'épargne</h4>
+                    <p id="res-annees">0</p>
+                    <small>ans</small>
+                </div>
+                <div class="result-card">
+                    <h4>Capital projeté</h4>
+                    <p id="res-projete">0 MAD</p>
+                    <small>à la retraite</small>
+                </div>
+                <div class="result-card">
+                    <h4>Taux remplacement</h4>
+                    <p id="res-taux">0%</p>
+                    <small>objectif</small>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Évolution de votre capital</h3>
+            <table class="evolution-table">
+                <thead>
+                    <tr>
+                        <th>Age</th>
+                        <th>Capital accumulé</th>
+                    </tr>
+                </thead>
+                <tbody id="evolution-tbody"></tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <h2>Rappel : Régimes de retraite au Maroc</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                <h3>CNSS (Régime de base)</h3>
+                <p>Age légal : 63 ans | Pension calculée sur les 96 meilleurs mois | Taux plein après 3 240 jours de cotisation</p>
+                <h3 style="margin-top: 15px;">CIMR (Fonctionnaires)</h3>
+                <p>Age légal : 63 ans | Pension proportionnelle au nombre de trimestres cotisés</p>
+                <h3 style="margin-top: 15px;">Retraite complémentaire</h3>
+                <p>Assurance-vie, PEA, OPCVM, immobilier locatif | Déductions fiscales jusqu'à 10% du RNI</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
+
+        async function calculateRetraite() {
+            const age_actuel = parseInt(document.getElementById('age-actuel').value);
+            const age_retraite = parseInt(document.getElementById('age-retraite').value);
+            const revenu_actuel = parseFloat(document.getElementById('revenu').value);
+            const taux_remplacement = parseFloat(document.getElementById('taux-remplacement').value);
+            const rendement = parseFloat(document.getElementById('rendement').value);
+            const capital_existant = parseFloat(document.getElementById('capital-existant').value);
+
+            if (!age_actuel || !age_retraite || !revenu_actuel || !taux_remplacement || !rendement) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/simulateur/retraite`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ age_actuel, age_retraite, revenu_actuel, taux_remplacement, rendement, capital_existant })
+                });
+
+                if (!response.ok) throw new Error('Erreur de calcul');
+                const data = await response.json();
+                displayResults(data);
+            } catch (err) {
+                alert('Erreur : ' + err.message);
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('res-capital').textContent = data.capital_necessaire.toLocaleString() + ' MAD';
+            document.getElementById('res-versement').textContent = data.versement_mensuel.toLocaleString() + ' MAD';
+            document.getElementById('res-besoin').textContent = data.besoin_mensuel.toLocaleString() + ' MAD';
+            document.getElementById('res-annees').textContent = data.annees_epargne;
+            document.getElementById('res-projete').textContent = data.capital_projete.toLocaleString() + ' MAD';
+            document.getElementById('res-taux').textContent = data.taux_remplacement + '%';
+
+            const alertContainer = document.getElementById('alert-container');
+            alertContainer.innerHTML = '';
+
+            if (data.versement_mensuel > data.besoin_mensuel * 0.5) {
+                alertContainer.innerHTML += `<div class="alert alert-warning">⚠️ Votre versement mensuel (${data.versement_mensuel.toLocaleString()} MAD) représente plus de 50% de votre besoin futur. Envisagez de reporter votre retraite ou d'augmenter votre rendement.</div>`;
+            } else {
+                alertContainer.innerHTML += `<div class="alert alert-success">✅ Votre plan d'épargne est réalisable. Commencez dès maintenant pour bénéficier des intérêts composés !</div>`;
+            }
+
+            const tbody = document.getElementById('evolution-tbody');
+            tbody.innerHTML = '';
+            data.evolution.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.annee} ans</td>
+                    <td>${row.capital.toLocaleString()} MAD</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

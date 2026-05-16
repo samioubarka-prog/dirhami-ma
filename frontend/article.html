@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article - Dirhami.ma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .article-container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .article-header { margin-bottom: 30px; }
+        .article-category { display: inline-block; background: #3498db; color: white; padding: 4px 12px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; }
+        .article-title { font-size: 32px; color: #2c3e50; margin: 0 0 15px 0; line-height: 1.3; }
+        .article-meta { color: #7f8c8d; font-size: 14px; }
+        .article-content { font-size: 18px; line-height: 1.8; color: #333; }
+        .article-content h2 { color: #2c3e50; margin-top: 30px; }
+        .article-content h3 { color: #3498db; margin-top: 25px; }
+        .article-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .article-content th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
+        .article-content td { padding: 12px; border-bottom: 1px solid #eee; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3498db; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Dirhami.ma</a>
+            <ul class="nav-links">
+                <li><a href="comparateur-cartes.html">Cartes Bancaires</a></li>
+                <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+                <li><a href="simulateur-credit.html">Crédit</a></li>
+                <li><a href="simulateur-retraite.html">Retraite</a></li>
+                <li><a href="simulateur-budget.html">Budget</a></li>
+                <li><a href="regimes-fiscaux.html">Régimes Fiscaux</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 100px;">
+        <div class="article-container">
+            <a href="blog.html" class="back-link">← Retour au blog</a>
+            <div id="loading">Chargement de l'article...</div>
+            <div id="error" style="display:none; color: red; padding: 20px; background: #fee; border-radius: 8px;"></div>
+            <div id="article-content" style="display:none;">
+                <div class="article-header">
+                    <span class="article-category" id="article-cat"></span>
+                    <h1 class="article-title" id="article-title"></h1>
+                    <div class="article-meta" id="article-meta"></div>
+                </div>
+                <div class="article-content" id="article-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
+
+        async function loadArticle() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug');
+            if (!slug) {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Article non trouvé';
+                document.getElementById('loading').style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/articles/${slug}`);
+                if (!response.ok) throw new Error('Article non trouvé');
+                const article = await response.json();
+                displayArticle(article);
+            } catch (err) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = err.message;
+            }
+        }
+
+        function displayArticle(article) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('article-content').style.display = 'block';
+            document.getElementById('article-cat').textContent = article.categorie;
+            document.getElementById('article-title').textContent = article.titre;
+            document.getElementById('article-meta').textContent = `Publié le ${new Date(article.date_pub).toLocaleDateString('fr-FR')} · ${article.lu} lectures`;
+            document.getElementById('article-body').innerHTML = article.contenu.replace(/
+/g, '<br>');
+        }
+
+        loadArticle();
+    </script>
+</body>
+</html>

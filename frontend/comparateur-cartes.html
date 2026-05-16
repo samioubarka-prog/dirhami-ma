@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparateur Cartes Bancaires Maroc 2026 - Dirhami.ma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .filters { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .filter-group { display: inline-block; margin: 10px 15px 10px 0; }
+        .filter-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #2c3e50; }
+        .filter-group select, .filter-group input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; min-width: 180px; }
+        .cards-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .cards-table th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
+        .cards-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .cards-table tr:hover { background: #f8f9fa; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .detail-btn { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .detail-btn:hover { background: #2980b9; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 10px; width: 80%; max-width: 700px; max-height: 80vh; overflow-y: auto; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #000; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .detail-item { background: #f8f9fa; padding: 15px; border-radius: 8px; }
+        .detail-item h4 { margin: 0 0 8px 0; color: #2c3e50; font-size: 14px; }
+        .detail-item p { margin: 0; font-size: 16px; font-weight: 600; color: #3498db; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Dirhami.ma</a>
+            <ul class="nav-links">
+                <li><a href="comparateur-cartes.html">Cartes Bancaires</a></li>
+                <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+                <li><a href="simulateur-credit.html">Crédit</a></li>
+                <li><a href="simulateur-retraite.html">Retraite</a></li>
+                <li><a href="simulateur-budget.html">Budget</a></li>
+                <li><a href="regimes-fiscaux.html">Régimes Fiscaux</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 100px;">
+        <h1>Comparateur Cartes Bancaires Maroc 2026</h1>
+        <p>Comparez les frais, plafonds et avantages des cartes bancaires des principales banques au Maroc.</p>
+
+        <div class="filters">
+            <h3>Filtres</h3>
+            <div class="filter-group">
+                <label>Banque</label>
+                <select id="filter-banque">
+                    <option value="">Toutes les banques</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Type de carte</label>
+                <select id="filter-type">
+                    <option value="">Tous les types</option>
+                    <option value="Visa Classic">Visa Classic</option>
+                    <option value="Visa Gold">Visa Gold</option>
+                    <option value="Visa Platinum">Visa Platinum</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Frais max/an (MAD)</label>
+                <input type="number" id="filter-frais" placeholder="Ex: 300">
+            </div>
+            <div class="filter-group">
+                <label>Assurance voyage</label>
+                <select id="filter-assurance">
+                    <option value="">Indifférent</option>
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                </select>
+            </div>
+            <button onclick="applyFilters()" style="background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 20px;">Appliquer les filtres</button>
+            <button onclick="resetFilters()" style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 20px; margin-left: 10px;">Réinitialiser</button>
+        </div>
+
+        <div id="loading">Chargement des données...</div>
+        <div id="error" style="display:none; color: red; padding: 20px; background: #fee; border-radius: 8px;"></div>
+
+        <table class="cards-table" id="cards-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Banque</th>
+                    <th>Carte</th>
+                    <th>Type</th>
+                    <th>Frais/an</th>
+                    <th>Retrait DAB nat.</th>
+                    <th>Retrait int.</th>
+                    <th>Plafond retrait/jour</th>
+                    <th>Plafond paiement/jour</th>
+                    <th>Assurance</th>
+                    <th>Cashback</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="cards-tbody"></tbody>
+        </table>
+
+        <div id="no-results" style="display:none; text-align: center; padding: 40px; color: #666;">
+            <h3>Aucune carte ne correspond à vos critères</h3>
+            <p>Essayez d'élargir vos filtres.</p>
+        </div>
+    </div>
+
+    <div id="detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div class="detail-grid" id="modal-details"></div>
+        </div>
+    </div>
+
+    <script>
+        let allCards = [];
+        const API_URL = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
+
+        async function loadCards() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('error').style.display = 'none';
+                const response = await fetch(`${API_URL}/api/cartes`);
+                if (!response.ok) throw new Error('Erreur réseau');
+                allCards = await response.json();
+                populateBanques();
+                displayCards(allCards);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('cards-table').style.display = 'table';
+            } catch (err) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Erreur de chargement : ' + err.message;
+            }
+        }
+
+        function populateBanques() {
+            const banques = [...new Set(allCards.map(c => c.banque))].sort();
+            const select = document.getElementById('filter-banque');
+            banques.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b;
+                opt.textContent = b;
+                select.appendChild(opt);
+            });
+        }
+
+        function displayCards(cards) {
+            const tbody = document.getElementById('cards-tbody');
+            tbody.innerHTML = '';
+            if (cards.length === 0) {
+                document.getElementById('no-results').style.display = 'block';
+                document.getElementById('cards-table').style.display = 'none';
+                return;
+            }
+            document.getElementById('no-results').style.display = 'none';
+            document.getElementById('cards-table').style.display = 'table';
+            cards.forEach(card => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${card.banque}</strong></td>
+                    <td>${card.nom_carte}</td>
+                    <td><span class="badge badge-warning">${card.type}</span></td>
+                    <td><strong>${card.frais_annuels} MAD</strong></td>
+                    <td>${card.retrait_dab_national}%</td>
+                    <td>${card.retrait_dab_international}%</td>
+                    <td>${card.plafond_retrait_jour.toLocaleString()} MAD</td>
+                    <td>${card.plafond_paiement_jour.toLocaleString()} MAD</td>
+                    <td>${card.assurance_voyage ? '<span class="badge badge-success">Oui</span>' : '<span class="badge badge-danger">Non</span>'}</td>
+                    <td>${card.cashback > 0 ? '<span class="badge badge-success">' + card.cashback + '%</span>' : '<span class="badge badge-danger">Non</span>'}</td>
+                    <td><button class="detail-btn" onclick="showDetail(${card.id})">Détail</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function applyFilters() {
+            const banque = document.getElementById('filter-banque').value;
+            const type = document.getElementById('filter-type').value;
+            const fraisMax = parseFloat(document.getElementById('filter-frais').value) || Infinity;
+            const assurance = document.getElementById('filter-assurance').value;
+            let filtered = allCards.filter(c => {
+                if (banque && c.banque !== banque) return false;
+                if (type && c.type !== type) return false;
+                if (c.frais_annuels > fraisMax) return false;
+                if (assurance !== '' && c.assurance_voyage !== parseInt(assurance)) return false;
+                return true;
+            });
+            displayCards(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-banque').value = '';
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-frais').value = '';
+            document.getElementById('filter-assurance').value = '';
+            displayCards(allCards);
+        }
+
+        function showDetail(id) {
+            const card = allCards.find(c => c.id === id);
+            if (!card) return;
+            document.getElementById('modal-title').textContent = `${card.banque} - ${card.nom_carte}`;
+            document.getElementById('modal-details').innerHTML = `
+                <div class="detail-item"><h4>Type</h4><p>${card.type}</p></div>
+                <div class="detail-item"><h4>Frais annuels</h4><p>${card.frais_annuels} MAD</p></div>
+                <div class="detail-item"><h4>Retrait DAB national</h4><p>${card.detail_retrait_national || card.retrait_dab_national + '%'}</p></div>
+                <div class="detail-item"><h4>Retrait international</h4><p>${card.detail_retrait_international || card.retrait_dab_international + '%'}</p></div>
+                <div class="detail-item"><h4>Paiement national</h4><p>${card.detail_paiement_national || 'Gratuit'}</p></div>
+                <div class="detail-item"><h4>Paiement international</h4><p>${card.detail_paiement_international || 'Gratuit'}</p></div>
+                <div class="detail-item"><h4>Plafond retrait/jour</h4><p>${card.plafond_retrait_jour.toLocaleString()} MAD</p></div>
+                <div class="detail-item"><h4>Plafond paiement/jour</h4><p>${card.plafond_paiement_jour.toLocaleString()} MAD</p></div>
+                <div class="detail-item"><h4>Plafond internet</h4><p>${card.plafond_internet.toLocaleString()} MAD</p></div>
+                <div class="detail-item"><h4>Assurance voyage</h4><p>${card.detail_assurance || (card.assurance_voyage ? 'Incluse' : 'Non incluse')}</p></div>
+                <div class="detail-item"><h4>Cashback</h4><p>${card.detail_cashback || (card.cashback > 0 ? card.cashback + '%' : 'Aucun')}</p></div>
+                <div class="detail-item"><h4>Contactless</h4><p>${card.detail_contactless || (card.contactless ? 'Disponible' : 'Non disponible')}</p></div>
+                <div class="detail-item" style="grid-column: 1 / -1;"><h4>Avantages</h4><p>${card.avantages}</p></div>
+            `;
+            document.getElementById('detail-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('detail-modal');
+            if (event.target === modal) modal.style.display = 'none';
+        }
+
+        loadCards();
+    </script>
+</body>
+</html>

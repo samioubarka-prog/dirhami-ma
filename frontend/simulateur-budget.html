@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Budget Maroc 2026 - Dirhami.ma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .simulator-form { background: #f8f9fa; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #2c3e50; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .btn-calculate { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 6px; font-size: 18px; cursor: pointer; width: 100%; }
+        .btn-calculate:hover { background: #219a52; }
+        .results { display: none; background: white; padding: 30px; border-radius: 10px; border: 2px solid #27ae60; margin-top: 20px; }
+        .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0; }
+        .result-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
+        .result-card h4 { margin: 0 0 10px 0; color: #7f8c8d; font-size: 14px; }
+        .result-card p { margin: 0; font-size: 24px; font-weight: bold; color: #2c3e50; }
+        .result-card small { color: #7f8c8d; }
+        .alert { padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .alert-warning { background: #fff3cd; color: #856404; }
+        .alert-danger { background: #f8d7da; color: #721c24; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .repartition-bar { display: flex; height: 40px; border-radius: 20px; overflow: hidden; margin: 20px 0; }
+        .repartition-segment { display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600; }
+        .suggestions-list { list-style: none; padding: 0; }
+        .suggestions-list li { padding: 10px; margin: 5px 0; border-radius: 6px; background: #f8f9fa; border-left: 4px solid #3498db; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Dirhami.ma</a>
+            <ul class="nav-links">
+                <li><a href="comparateur-cartes.html">Cartes Bancaires</a></li>
+                <li><a href="comparateur-opcvm.html">OPCVM</a></li>
+                <li><a href="simulateur-credit.html">Crédit</a></li>
+                <li><a href="simulateur-retraite.html">Retraite</a></li>
+                <li><a href="simulateur-budget.html">Budget</a></li>
+                <li><a href="regimes-fiscaux.html">Régimes Fiscaux</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 100px;">
+        <h1>Simulateur Budget Familial Maroc 2026</h1>
+        <p>Analysez vos revenus et dépenses pour optimiser votre épargne mensuelle</p>
+
+        <div class="simulator-form">
+            <h2>Vos revenus et dépenses</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Revenus mensuels nets (MAD)</label>
+                    <input type="number" id="revenus" value="10000" min="0" step="500">
+                </div>
+                <div class="form-group">
+                    <label>Loyer / Crédit logement (MAD)</label>
+                    <input type="number" id="loyer" value="3000" min="0" step="100">
+                </div>
+                <div class="form-group">
+                    <label>Transport (MAD)</label>
+                    <input type="number" id="transport" value="800" min="0" step="50">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nourriture (MAD)</label>
+                    <input type="number" id="nourriture" value="2000" min="0" step="100">
+                </div>
+                <div class="form-group">
+                    <label>Santé (MAD)</label>
+                    <input type="number" id="sante" value="300" min="0" step="50">
+                </div>
+                <div class="form-group">
+                    <label>Loisirs (MAD)</label>
+                    <input type="number" id="loisirs" value="500" min="0" step="50">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Autres dépenses (MAD)</label>
+                    <input type="number" id="autres" value="500" min="0" step="50">
+                </div>
+                <div class="form-group">
+                    <label>Objectif d'épargne (%)</label>
+                    <input type="number" id="objectif-epargne" value="20" min="5" max="50" step="5">
+                </div>
+                <div class="form-group">
+                    <label style="color: transparent;">.</label>
+                    <button class="btn-calculate" onclick="calculateBudget()">Analyser mon budget</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <h2>Résultats de l'analyse</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <h4>Total dépenses</h4>
+                    <p id="res-depenses">0 MAD</p>
+                </div>
+                <div class="result-card">
+                    <h4>Solde disponible</h4>
+                    <p id="res-solde">0 MAD</p>
+                </div>
+                <div class="result-card">
+                    <h4>Taux d'épargne</h4>
+                    <p id="res-taux">0%</p>
+                </div>
+                <div class="result-card">
+                    <h4>Taux d'endettement</h4>
+                    <p id="res-endettement">0%</p>
+                </div>
+            </div>
+
+            <h3>Répartition de votre budget</h3>
+            <div id="repartition-bar" class="repartition-bar"></div>
+            <div id="repartition-legend" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;"></div>
+
+            <h3 style="margin-top: 30px;">Conseils personnalisés</h3>
+            <ul id="suggestions" class="suggestions-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
+        const colors = { loyer: '#e74c3c', transport: '#f39c12', nourriture: '#27ae60', sante: '#3498db', loisirs: '#9b59b6', autres: '#95a5a6', epargne: '#2ecc71' };
+
+        async function calculateBudget() {
+            const revenus = parseFloat(document.getElementById('revenus').value);
+            const loyer = parseFloat(document.getElementById('loyer').value);
+            const transport = parseFloat(document.getElementById('transport').value);
+            const nourriture = parseFloat(document.getElementById('nourriture').value);
+            const sante = parseFloat(document.getElementById('sante').value);
+            const loisirs = parseFloat(document.getElementById('loisirs').value);
+            const autres = parseFloat(document.getElementById('autres').value);
+            const objectif_epargne = parseFloat(document.getElementById('objectif-epargne').value);
+
+            if (!revenus) {
+                alert('Veuillez entrer vos revenus');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/simulateur/budget`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ revenus, loyer, transport, nourriture, sante, loisirs, autres, objectif_epargne })
+                });
+
+                if (!response.ok) throw new Error('Erreur de calcul');
+                const data = await response.json();
+                displayResults(data);
+            } catch (err) {
+                alert('Erreur : ' + err.message);
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('res-depenses').textContent = data.total_depenses.toLocaleString() + ' MAD';
+            document.getElementById('res-solde').textContent = data.solde.toLocaleString() + ' MAD';
+            document.getElementById('res-taux').textContent = data.taux_epargne + '%';
+            document.getElementById('res-endettement').textContent = data.taux_endettement + '%';
+
+            const repartition = data.repartition;
+            const total = Object.values(repartition).reduce((a, b) => a + b, 0);
+            const bar = document.getElementById('repartition-bar');
+            bar.innerHTML = '';
+            const legend = document.getElementById('repartition-legend');
+            legend.innerHTML = '';
+
+            Object.entries(repartition).forEach(([key, value]) => {
+                if (value > 0) {
+                    const pct = (value / total * 100).toFixed(1);
+                    const seg = document.createElement('div');
+                    seg.className = 'repartition-segment';
+                    seg.style.width = pct + '%';
+                    seg.style.background = colors[key];
+                    seg.textContent = pct + '%';
+                    bar.appendChild(seg);
+
+                    const leg = document.createElement('div');
+                    leg.innerHTML = `<span style="display:inline-block;width:12px;height:12px;background:${colors[key]};border-radius:3px;margin-right:5px;"></span>${key.charAt(0).toUpperCase() + key.slice(1)} : ${value.toLocaleString()} MAD`;
+                    legend.appendChild(leg);
+                }
+            });
+
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+            data.suggestions.forEach(s => {
+                const li = document.createElement('li');
+                li.textContent = s;
+                suggestions.appendChild(li);
+            });
+
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
