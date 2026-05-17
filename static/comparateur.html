@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparateur - Dirhami</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo"><span class="logo-icon">&#1583;</span><span class="logo-text">Dirhami</span></a>
+            <div class="nav-links">
+                <a href="/comparateur.html" class="active">Comparateur</a>
+                <a href="/simulateurs.html">Simulateurs</a>
+                <a href="/blog.html">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-comparateur">
+        <div class="container">
+            <h1>Comparateur bancaire</h1>
+            <p class="section-subtitle">Comparez les offres bancaires et trouvez celle qui vous correspond.</p>
+
+            <div class="compare-filters">
+                <select id="compare-category" onchange="loadProducts()">
+                    <option value="all">Toutes categories</option>
+                    <option value="compte">Comptes bancaires</option>
+                    <option value="epargne">Epargne</option>
+                    <option value="investissement">Investissement</option>
+                    <option value="credit">Credit</option>
+                </select>
+                <select id="compare-bank" onchange="loadProducts()">
+                    <option value="all">Toutes banques</option>
+                </select>
+            </div>
+
+            <div class="products-table-wrapper">
+                <table class="products-table" id="products-table">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Banque</th>
+                            <th>Type</th>
+                            <th>Taux/Rendement</th>
+                            <th>Frais</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-tbody">
+                        <tr><td colspan="6" class="loading">Chargement des produits...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Dirhami</p>
+        </div>
+    </footer>
+
+    <script>
+        async function loadBanks() {
+            const res = await fetch('/api/banks/');
+            const banks = await res.json();
+            const select = document.getElementById('compare-bank');
+            banks.forEach(b => {
+                select.innerHTML += `<option value="${b.id}">${b.name}</option>`;
+            });
+        }
+
+        async function loadProducts() {
+            const category = document.getElementById('compare-category').value;
+            const bankId = document.getElementById('compare-bank').value;
+
+            // This would fetch from API in production
+            const tbody = document.getElementById('products-tbody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="coming-soon">
+                        <p>Le comparateur complet sera bientot disponible avec toutes les offres bancaires marocaines.</p>
+                        <p>En attendant, utilisez nos <a href="/simulateurs.html">simulateurs</a> pour calculer vos projets.</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        loadBanks();
+        loadProducts();
+    </script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
