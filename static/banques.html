@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banques - Dirhami</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo"><span class="logo-icon">&#1583;</span><span class="logo-text">Dirhami</span></a>
+            <div class="nav-links">
+                <a href="/comparateur.html">Comparateur</a>
+                <a href="/simulateurs.html">Simulateurs</a>
+                <a href="/blog.html">Blog</a>
+                <a href="/banques.html" class="active">Banques</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-banques">
+        <div class="container">
+            <h1>Banques au Maroc</h1>
+            <p class="section-subtitle">Comparez les banques conventionnelles et participatives du Maroc.</p>
+
+            <div class="bank-filters">
+                <button class="filter-btn active" onclick="filterBanks('all')">Toutes</button>
+                <button class="filter-btn" onclick="filterBanks('conventionnelle')">Conventionnelles</button>
+                <button class="filter-btn" onclick="filterBanks('participative')">Participatives</button>
+            </div>
+
+            <div class="banks-grid" id="banks-grid"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Dirhami</p>
+        </div>
+    </footer>
+
+    <script>
+        async function loadBanks(type = 'all') {
+            const url = type === 'all' ? '/api/banks/' : `/api/banks/?type=${type}`;
+            try {
+                const res = await fetch(url);
+                const banks = await res.json();
+
+                const grid = document.getElementById('banks-grid');
+                grid.innerHTML = banks.map(bank => `
+                    <div class="bank-card">
+                        <div class="bank-header">
+                            <div class="bank-logo">${bank.name.charAt(0)}</div>
+                            <div class="bank-info">
+                                <h3>${bank.name}</h3>
+                                <span class="bank-type ${bank.type}">${bank.type}</span>
+                            </div>
+                        </div>
+                        <div class="bank-details">
+                            <p><strong>Site:</strong> <a href="https://${bank.website}" target="_blank">${bank.website}</a></p>
+                            ${bank.name_ar ? `<p class="bank-ar">${bank.name_ar}</p>` : ''}
+                        </div>
+                        <a href="/comparateur.html?bank=${bank.id}" class="btn btn-primary btn-sm">Voir les produits</a>
+                    </div>
+                `).join('');
+            } catch (e) {
+                document.getElementById('banks-grid').innerHTML = '<p>Erreur de chargement.</p>';
+            }
+        }
+
+        function filterBanks(type) {
+            document.querySelectorAll('.bank-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            loadBanks(type);
+        }
+
+        loadBanks();
+    </script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
