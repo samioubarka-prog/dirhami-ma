@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateurs - Dirhami</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo"><span class="logo-icon">&#1583;</span><span class="logo-text">Dirhami</span></a>
+            <div class="nav-links">
+                <a href="/comparateur.html">Comparateur</a>
+                <a href="/simulateurs.html" class="active">Simulateurs</a>
+                <a href="/blog.html">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-simulateurs">
+        <div class="container">
+            <h1>Simulateurs financiers</h1>
+            <p class="section-subtitle">Calculez vos projets d'investissement, de credit et de retraite en quelques clics.</p>
+
+            <div class="sim-tabs">
+                <button class="sim-tab active" onclick="switchTab('investment')" id="tab-investment">&#128200; Investissement</button>
+                <button class="sim-tab" onclick="switchTab('loan')" id="tab-loan">&#127969; Credit Immobilier</button>
+                <button class="sim-tab" onclick="switchTab('retirement')" id="tab-retirement">&#127796; Retraite</button>
+            </div>
+
+            <!-- INVESTMENT CALCULATOR -->
+            <div class="sim-panel active" id="panel-investment">
+                <div class="sim-layout">
+                    <div class="sim-form">
+                        <h2>Simulateur d'investissement</h2>
+                        <p class="form-desc">Calculez la croissance de votre capital avec les interets composes.</p>
+
+                        <div class="form-group">
+                            <label>Montant initial (MAD)</label>
+                            <input type="number" id="inv-initial" value="10000" min="0" step="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>Versement mensuel (MAD)</label>
+                            <input type="number" id="inv-monthly" value="1000" min="0" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Taux de rendement annuel (%)</label>
+                            <div class="range-wrapper">
+                                <input type="range" id="inv-rate" min="1" max="20" value="7" step="0.5" oninput="updateRange('inv-rate', 'inv-rate-val')">
+                                <span class="range-value" id="inv-rate-val">7%</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Duree (annees)</label>
+                            <div class="range-wrapper">
+                                <input type="range" id="inv-years" min="1" max="30" value="10" oninput="updateRange('inv-years', 'inv-years-val')">
+                                <span class="range-value" id="inv-years-val">10 ans</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg" onclick="calculateInvestment()">
+                            <span id="inv-btn-text">Calculer</span>
+                        </button>
+                    </div>
+                    <div class="sim-results" id="inv-results">
+                        <div class="result-cards">
+                            <div class="result-card">
+                                <span class="result-label">Montant final</span>
+                                <span class="result-value" id="inv-final">-</span>
+                            </div>
+                            <div class="result-card accent">
+                                <span class="result-label">Gain total</span>
+                                <span class="result-value" id="inv-gain">-</span>
+                            </div>
+                            <div class="result-card">
+                                <span class="result-label">Total verse</span>
+                                <span class="result-value" id="inv-total">-</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="inv-chart"></canvas>
+                        </div>
+                        <div class="projection-table" id="inv-table"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOAN CALCULATOR -->
+            <div class="sim-panel" id="panel-loan">
+                <div class="sim-layout">
+                    <div class="sim-form">
+                        <h2>Calculateur de credit immobilier</h2>
+                        <p class="form-desc">Calculez vos mensualites et votre tableau d'amortissement.</p>
+
+                        <div class="form-group">
+                            <label>Montant du pret (MAD)</label>
+                            <input type="number" id="loan-amount" value="500000" min="50000" step="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Taux annuel (%)</label>
+                            <div class="range-wrapper">
+                                <input type="range" id="loan-rate" min="2" max="12" value="5.5" step="0.1" oninput="updateRange('loan-rate', 'loan-rate-val')">
+                                <span class="range-value" id="loan-rate-val">5.5%</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Duree (annees)</label>
+                            <div class="range-wrapper">
+                                <input type="range" id="loan-years" min="5" max="25" value="20" oninput="updateRange('loan-years', 'loan-years-val')">
+                                <span class="range-value" id="loan-years-val">20 ans</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Type de pret</label>
+                            <select id="loan-type">
+                                <option value="amortissable">Amortissable (mensualite fixe)</option>
+                                <option value="in_fine">In fine (interets seulement)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-lg" onclick="calculateLoan()">
+                            <span id="loan-btn-text">Calculer</span>
+                        </button>
+                    </div>
+                    <div class="sim-results" id="loan-results">
+                        <div class="result-cards">
+                            <div class="result-card">
+                                <span class="result-label">Mensualite</span>
+                                <span class="result-value" id="loan-monthly">-</span>
+                            </div>
+                            <div class="result-card accent">
+                                <span class="result-label">Cout total du credit</span>
+                                <span class="result-value" id="loan-cost">-</span>
+                            </div>
+                            <div class="result-card">
+                                <span class="result-label">Interets totaux</span>
+                                <span class="result-value" id="loan-interest">-</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="loan-chart"></canvas>
+                        </div>
+                        <div class="amortization-table" id="loan-table"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RETIREMENT CALCULATOR -->
+            <div class="sim-panel" id="panel-retirement">
+                <div class="sim-layout">
+                    <div class="sim-form">
+                        <h2>Simulateur de retraite</h2>
+                        <p class="form-desc">Projetez votre capital et votre pension de retraite.</p>
+
+                        <div class="form-group">
+                            <label>Age actuel</label>
+                            <input type="number" id="ret-current" value="30" min="18" max="65">
+                        </div>
+                        <div class="form-group">
+                            <label>Age de retraite souhaite</label>
+                            <input type="number" id="ret-age" value="60" min="50" max="70">
+                        </div>
+                        <div class="form-group">
+                            <label>Epargne actuelle (MAD)</label>
+                            <input type="number" id="ret-savings" value="50000" min="0" step="5000">
+                        </div>
+                        <div class="form-group">
+                            <label>Versement mensuel (MAD)</label>
+                            <input type="number" id="ret-monthly" value="2000" min="0" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Rendement attendu (%)</label>
+                            <div class="range-wrapper">
+                                <input type="range" id="ret-return" min="3" max="12" value="6" step="0.5" oninput="updateRange('ret-return', 'ret-return-val')">
+                                <span class="range-value" id="ret-return-val">6%</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg" onclick="calculateRetirement()">
+                            <span id="ret-btn-text">Calculer</span>
+                        </button>
+                    </div>
+                    <div class="sim-results" id="ret-results">
+                        <div class="result-cards">
+                            <div class="result-card">
+                                <span class="result-label">Capital a la retraite</span>
+                                <span class="result-value" id="ret-capital">-</span>
+                            </div>
+                            <div class="result-card accent">
+                                <span class="result-label">Pension mensuelle estimee</span>
+                                <span class="result-value" id="ret-pension">-</span>
+                            </div>
+                            <div class="result-card">
+                                <span class="result-label">Annees d'epargne</span>
+                                <span class="result-value" id="ret-years">-</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="ret-chart"></canvas>
+                        </div>
+                        <div class="projection-table" id="ret-table"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Dirhami - Simulateurs financiers pour le Maroc</p>
+        </div>
+    </footer>
+
+    <script src="/js/simulators.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
