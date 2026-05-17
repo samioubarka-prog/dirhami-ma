@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Dirhami</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo"><span class="logo-icon">&#1583;</span><span class="logo-text">Dirhami</span></a>
+            <div class="nav-links">
+                <a href="/comparateur.html">Comparateur</a>
+                <a href="/simulateurs.html">Simulateurs</a>
+                <a href="/blog.html" class="active">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-blog">
+        <div class="container">
+            <h1>Nos guides financiers</h1>
+            <p class="section-subtitle">Conseils d'experts pour vous aider a faire les meilleurs choix financiers au Maroc.</p>
+
+            <div class="blog-filters">
+                <button class="filter-btn active" onclick="filterArticles('all')">Tous</button>
+                <button class="filter-btn" onclick="filterArticles('epargne')">Epargne</button>
+                <button class="filter-btn" onclick="filterArticles('investissement')">Investissement</button>
+                <button class="filter-btn" onclick="filterArticles('credit')">Credit</button>
+                <button class="filter-btn" onclick="filterArticles('assurance')">Assurance</button>
+                <button class="filter-btn" onclick="filterArticles('crypto')">Crypto</button>
+            </div>
+            <div class="articles-grid" id="blog-grid"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Dirhami</p>
+        </div>
+    </footer>
+
+    <script>
+        async function loadArticles(category = 'all') {
+            const url = category === 'all' ? '/api/blog/' : `/api/blog/?category=${category}`;
+            try {
+                const res = await fetch(url);
+                const articles = await res.json();
+
+                const grid = document.getElementById('blog-grid');
+                if (!articles.length) {
+                    grid.innerHTML = '<p class="no-results">Aucun article disponible pour le moment.</p>';
+                    return;
+                }
+
+                grid.innerHTML = articles.map(art => `
+                    <article class="article-card">
+                        <div class="article-image" style="background: linear-gradient(135deg, #1a5f2a 0%, #2d8a3e 100%);">
+                            <span class="article-category">${art.category}</span>
+                        </div>
+                        <div class="article-content">
+                            <h3><a href="/article.html?slug=${art.slug}">${art.title}</a></h3>
+                            <p>${art.excerpt}</p>
+                            <div class="article-meta">
+                                <span>${art.author}</span>
+                                <span>${new Date(art.published_at).toLocaleDateString('fr-FR')}</span>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (e) {
+                console.error('Erreur chargement articles:', e);
+                document.getElementById('blog-grid').innerHTML = '<p class="no-results">Erreur de chargement. Veuillez reessayer.</p>';
+            }
+        }
+
+        function filterArticles(cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            loadArticles(cat);
+        }
+
+        loadArticles();
+    </script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
