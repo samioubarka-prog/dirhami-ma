@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparateur Cartes Bancaires Maroc | Dirhami</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #1a5f2a; --secondary: #d4af37; --dark: #1a1a2e; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%); color: white; padding: 60px 0; }
+        .carte-card { background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; margin-bottom: 20px; }
+        .carte-card:hover { transform: translateY(-5px); }
+        .frais-badge { background: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; }
+        .avantage-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.75em; margin: 2px; display: inline-block; }
+        .filter-btn { border: 2px solid var(--primary); color: var(--primary); background: white; padding: 8px 20px; border-radius: 25px; margin: 5px; cursor: pointer; transition: all 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; }
+        .detail-modal .modal-content { border-radius: 20px; }
+        .comparaison-table th { background: var(--primary); color: white; }
+        .cashback-positive { color: #27ae60; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--dark);">
+    <div class="container">
+        <a class="navbar-brand" href="index.html" style="color: var(--secondary); font-weight: bold; font-size: 1.5em;">
+            🇲🇦 DIRHAMI
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link active" href="cartes-bancaires.html">Cartes</a>
+                <a class="nav-link" href="opcvm.html">OPCVM</a>
+                <a class="nav-link" href="credit-immobilier.html">Crédit</a>
+                <a class="nav-link" href="retraite.html">Retraite</a>
+                <a class="nav-link" href="budget.html">Budget</a>
+                <a class="nav-link" href="fiscalite.html">Fiscalité</a>
+                <a class="nav-link" href="blog/index.html">Blog</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container text-center">
+        <h1>💳 Comparateur de Cartes Bancaires au Maroc</h1>
+        <p class="lead">Comparez les frais, plafonds et avantages de toutes les banques marocaines</p>
+        <p class="text-warning">Données actualisées Mai 2026</p>
+    </div>
+</section>
+
+<section class="container my-4">
+    <div class="card p-4">
+        <h5>🔍 Filtrer les cartes</h5>
+        <div class="row">
+            <div class="col-md-3">
+                <label>Banque</label>
+                <select id="filtre-banque" class="form-select" onchange="appliquerFiltres()">
+                    <option value="toutes">Toutes les banques</option>
+                    <option value="Attijariwafa Bank">Attijariwafa Bank</option>
+                    <option value="Banque Populaire">Banque Populaire</option>
+                    <option value="Bank of Africa">Bank of Africa</option>
+                    <option value="CIH Bank">CIH Bank</option>
+                    <option value="BMCI (BNP Paribas)">BMCI</option>
+                    <option value="Société Générale Maroc">SG Maroc</option>
+                    <option value="Umnia Bank">Umnia Bank</option>
+                    <option value="CIH Dar">CIH Dar</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Type de carte</label>
+                <select id="filtre-type" class="form-select" onchange="appliquerFiltres()">
+                    <option value="tous">Tous les types</option>
+                    <option value="visa">Visa</option>
+                    <option value="mastercard">Mastercard</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Catégorie</label>
+                <select id="filtre-categorie" class="form-select" onchange="appliquerFiltres()">
+                    <option value="toutes">Toutes catégories</option>
+                    <option value="standard">Standard</option>
+                    <option value="premium">Premium/Gold</option>
+                    <option value="participative">Participative (Islamique)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Budget max/an (DH)</label>
+                <input type="number" id="filtre-budget" class="form-control" placeholder="Ex: 200" oninput="appliquerFiltres()">
+            </div>
+        </div>
+        <div class="mt-3">
+            <button class="filter-btn active" id="btn-tous" onclick="setFiltreAvantage('tous')">Tous</button>
+            <button class="filter-btn" id="btn-cashback" onclick="setFiltreAvantage('cashback')">Avec Cashback</button>
+            <button class="filter-btn" id="btn-assurance" onclick="setFiltreAvantage('assurance')">Assurance Voyage</button>
+            <button class="filter-btn" id="btn-participative" onclick="setFiltreAvantage('participative')">Finance Islamique</button>
+        </div>
+    </div>
+</section>
+
+<section class="container mb-5">
+    <div id="cartes-container" class="row"></div>
+    <div id="aucun-resultat" class="text-center py-5" style="display:none;">
+        <h3>Aucune carte ne correspond à vos critères</h3>
+        <button class="btn btn-primary mt-3" onclick="reinitialiserFiltres()">Réinitialiser les filtres</button>
+    </div>
+</section>
+
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg detail-modal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: var(--primary); color: white;">
+                <h5 class="modal-title" id="modal-title">Détails de la carte</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/cartes-data.js"></script>
+<script>
+let filtreAvantageActif = 'tous';
+let cartesFiltrees = [...cartesData];
+
+function setFiltreAvantage(avantage) {
+    filtreAvantageActif = avantage;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('btn-' + avantage).classList.add('active');
+    appliquerFiltres();
+}
+
+function appliquerFiltres() {
+    const banque = document.getElementById('filtre-banque').value;
+    const type = document.getElementById('filtre-type').value;
+    const categorie = document.getElementById('filtre-categorie').value;
+    const budgetMax = parseFloat(document.getElementById('filtre-budget').value) || Infinity;
+
+    cartesFiltrees = cartesData.filter(carte => {
+        if (banque !== 'toutes' && carte.banque !== banque) return false;
+        if (type !== 'tous' && carte.type !== type) return false;
+        if (categorie !== 'toutes' && carte.categorie !== categorie) return false;
+        if (carte.fraisAnnuel > budgetMax) return false;
+        if (filtreAvantageActif === 'cashback' && carte.cashback === 0) return false;
+        if (filtreAvantageActif === 'assurance' && !carte.assuranceVoyage) return false;
+        if (filtreAvantageActif === 'participative' && carte.categorie !== 'participative') return false;
+        return true;
+    });
+
+    afficherCartes();
+}
+
+function afficherCartes() {
+    const container = document.getElementById('cartes-container');
+    const aucunResultat = document.getElementById('aucun-resultat');
+
+    if (cartesFiltrees.length === 0) {
+        container.innerHTML = '';
+        aucunResultat.style.display = 'block';
+        return;
+    }
+
+    aucunResultat.style.display = 'none';
+
+    container.innerHTML = cartesFiltrees.map(carte => `
+        <div class="col-md-6 col-lg-4">
+            <div class="carte-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge bg-secondary mb-2">${carte.banque}</span>
+                        <h4 class="mb-0">${carte.nom}</h4>
+                        <small class="text-muted">${carte.type.toUpperCase()} • ${carte.categorie}</small>
+                    </div>
+                    <div class="frais-badge">${carte.fraisAnnuel} DH/an</div>
+                </div>
+
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="h5 mb-0 text-primary">${carte.plafondRetrait.toLocaleString()}</div>
+                        <small class="text-muted">Retrait/mois</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h5 mb-0 text-primary">${carte.plafondPaiement.toLocaleString()}</div>
+                        <small class="text-muted">Paiement/mois</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h5 mb-0 ${carte.cashback > 0 ? 'cashback-positive' : 'text-muted'}">
+                            ${carte.cashback > 0 ? carte.cashback + '%' : '-'}
+                        </div>
+                        <small class="text-muted">Cashback</small>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    ${carte.avantages.map(a => `<span class="avantage-badge">${a}</span>`).join('')}
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" onclick="voirDetails('${carte.id}')">
+                        📋 Voir les détails complets
+                    </button>
+                    <button class="btn btn-primary" onclick="comparerCarte('${carte.id}')">
+                        ⚖️ Ajouter au comparateur
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function voirDetails(carteId) {
+    const carte = cartesData.find(c => c.id === carteId);
+    if (!carte) return;
+
+    document.getElementById('modal-title').textContent = `${carte.banque} - ${carte.nom}`;
+    document.getElementById('modal-body').innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="text-primary">💰 Frais et Plafonds</h6>
+                <table class="table table-sm">
+                    <tr><td>Frais annuels</td><td class="text-end"><strong>${carte.fraisAnnuel} DH</strong></td></tr>
+                    <tr><td>Retrait GAB même banque</td><td class="text-end">${carte.fraisRetraitGAB} DH</td></tr>
+                    <tr><td>Retrait GAB autre banque</td><td class="text-end">${carte.fraisRetraitHorsGAB} DH</td></tr>
+                    <tr><td>Plafond retrait mensuel</td><td class="text-end">${carte.plafondRetrait.toLocaleString()} DH</td></tr>
+                    <tr><td>Plafond paiement mensuel</td><td class="text-end">${carte.plafondPaiement.toLocaleString()} DH</td></tr>
+                    <tr><td>Taux de change</td><td class="text-end">${carte.tauxChange}%</td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-primary">✨ Avantages</h6>
+                <ul class="list-group list-group-flush">
+                    ${carte.avantages.map(a => `<li class="list-group-item">✅ ${a}</li>`).join('')}
+                    ${carte.assuranceVoyage ? '<li class="list-group-item text-success">✅ Assurance voyage incluse</li>' : '<li class="list-group-item text-muted">❌ Sans assurance voyage</li>'}
+                    ${carte.cashback > 0 ? `<li class="list-group-item text-success">💰 Cashback ${carte.cashback}% sur vos achats</li>` : ''}
+                </ul>
+            </div>
+        </div>
+        <div class="alert alert-info mt-3">
+            <strong>💡 Calcul pour un usage moyen :</strong><br>
+            Si vous retirez 4x/mois hors réseau + paiements : <strong>${(carte.fraisAnnuel + carte.fraisRetraitHorsGAB * 4 * 12).toLocaleString()} DH/an</strong> de frais totaux estimés.
+        </div>
+    `;
+
+    new bootstrap.Modal(document.getElementById('detailModal')).show();
+}
+
+let cartesAComparer = [];
+function comparerCarte(carteId) {
+    if (!cartesAComparer.includes(carteId)) {
+        cartesAComparer.push(carteId);
+    }
+    if (cartesAComparer.length >= 2) {
+        afficherComparaison();
+    } else {
+        alert('Sélectionnez au moins 2 cartes pour comparer. (' + cartesAComparer.length + '/2 sélectionnée(s))');
+    }
+}
+
+function afficherComparaison() {
+    const cartes = cartesAComparer.map(id => cartesData.find(c => c.id === id));
+    let html = '<div class="table-responsive"><table class="table comparaison-table">';
+    html += '<thead><tr><th>Critère</th>' + cartes.map(c => `<th>${c.banque}<br><small>${c.nom}</small></th>`).join('') + '</tr></thead><tbody>';
+
+    const criteres = [
+        ['Frais annuels', c => c.fraisAnnuel + ' DH'],
+        ['Type', c => c.type.toUpperCase()],
+        ['Catégorie', c => c.categorie],
+        ['Retrait GAB', c => c.fraisRetraitGAB + ' DH'],
+        ['Retrait hors GAB', c => c.fraisRetraitHorsGAB + ' DH'],
+        ['Plafond retrait', c => c.plafondRetrait.toLocaleString() + ' DH'],
+        ['Plafond paiement', c => c.plafondPaiement.toLocaleString() + ' DH'],
+        ['Taux change', c => c.tauxChange + '%'],
+        ['Cashback', c => c.cashback > 0 ? c.cashback + '%' : 'Non'],
+        ['Assurance voyage', c => c.assuranceVoyage ? '✅ Oui' : '❌ Non']
+    ];
+
+    criteres.forEach(([label, fn]) => {
+        html += `<tr><td><strong>${label}</strong></td>` + cartes.map(c => `<td>${fn(c)}</td>`).join('') + '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    html += '<button class="btn btn-secondary mt-3" onclick="cartesAComparer=[]; location.reload()">Nouvelle comparaison</button>';
+
+    document.getElementById('modal-title').textContent = '⚖️ Comparaison de cartes';
+    document.getElementById('modal-body').innerHTML = html;
+    new bootstrap.Modal(document.getElementById('detailModal')).show();
+}
+
+function reinitialiserFiltres() {
+    document.getElementById('filtre-banque').value = 'toutes';
+    document.getElementById('filtre-type').value = 'tous';
+    document.getElementById('filtre-categorie').value = 'toutes';
+    document.getElementById('filtre-budget').value = '';
+    filtreAvantageActif = 'tous';
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('btn-tous').classList.add('active');
+    appliquerFiltres();
+}
+
+afficherCartes();
+</script>
+</body>
+</html>
