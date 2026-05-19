@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPCVM Maroc - Comparateur | Dirhami</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #1a5f2a; --secondary: #d4af37; --dark: #1a1a2e; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%); color: white; padding: 60px 0; }
+        .opcvm-card { background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+        .opcvm-header { padding: 20px; border-bottom: 1px solid #eee; }
+        .rendement-positif { color: #27ae60; font-weight: bold; }
+        .rendement-negatif { color: #e74c3c; font-weight: bold; }
+        .frais-badge { background: #e74c3c; color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.8em; }
+        .detail-section { padding: 20px; }
+        .performance-bar { height: 8px; border-radius: 4px; background: #eee; overflow: hidden; }
+        .performance-fill { height: 100%; border-radius: 4px; }
+        .simulateur-box { background: linear-gradient(135deg, var(--primary), #2ecc71); color: white; border-radius: 15px; padding: 30px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--dark);">
+    <div class="container">
+        <a class="navbar-brand" href="index.html" style="color: var(--secondary); font-weight: bold; font-size: 1.5em;">🇲🇦 DIRHAMI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="cartes-bancaires.html">Cartes</a>
+                <a class="nav-link active" href="opcvm.html">OPCVM</a>
+                <a class="nav-link" href="credit-immobilier.html">Crédit</a>
+                <a class="nav-link" href="retraite.html">Retraite</a>
+                <a class="nav-link" href="budget.html">Budget</a>
+                <a class="nav-link" href="fiscalite.html">Fiscalité</a>
+                <a class="nav-link" href="blog/index.html">Blog</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container text-center">
+        <h1>📈 Comparateur OPCVM Maroc</h1>
+        <p class="lead">Comparez les fonds d'investissement : rendements, frais, risques</p>
+        <p class="text-warning">Données actualisées Mai 2026</p>
+    </div>
+</section>
+
+<section class="container my-4">
+    <div class="card p-4">
+        <h5>🔍 Filtrer les OPCVM</h5>
+        <div class="row">
+            <div class="col-md-3">
+                <label>Catégorie</label>
+                <select id="filtre-categorie" class="form-select" onchange="filtrerOPCVM()">
+                    <option value="toutes">Toutes</option>
+                    <option value="Actions Maroc">Actions Maroc</option>
+                    <option value="Monétaire">Monétaire</option>
+                    <option value="Obligations">Obligations</option>
+                    <option value="Diversifié">Diversifié</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Type</label>
+                <select id="filtre-type" class="form-select" onchange="filtrerOPCVM()">
+                    <option value="tous">Tous</option>
+                    <option value="actions">Actions</option>
+                    <option value="obligations">Obligations</option>
+                    <option value="monetaire">Monétaire</option>
+                    <option value="diversifie">Diversifié</option>
+                    <option value="participative">Participative</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Frais max</label>
+                <select id="filtre-frais" class="form-select" onchange="filtrerOPCVM()">
+                    <option value="tous">Tous</option>
+                    <option value="1">Moins de 1%</option>
+                    <option value="1.5">Moins de 1.5%</option>
+                    <option value="2">Moins de 2%</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Capital min</label>
+                <select id="filtre-capital" class="form-select" onchange="filtrerOPCVM()">
+                    <option value="tous">Tous</option>
+                    <option value="500">500 DH max</option>
+                    <option value="1000">1000 DH max</option>
+                    <option value="5000">5000 DH max</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container mb-3">
+    <div id="opcvm-container"></div>
+</section>
+
+<section class="container mb-5">
+    <div class="simulateur-box">
+        <h3 class="text-center mb-4">🧮 Simulateur de rendement OPCVM</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Montant initial (DH)</label>
+                <input type="number" id="sim-montant" class="form-control" value="10000" oninput="calculerSimulation()">
+            </div>
+            <div class="col-md-4">
+                <label>Durée (années)</label>
+                <input type="range" id="sim-duree" class="form-range" min="1" max="20" value="5" oninput="document.getElementById('duree-val').textContent=this.value; calculerSimulation()">
+                <div class="text-center"><span id="duree-val">5</span> ans</div>
+            </div>
+            <div class="col-md-4">
+                <label>Versement mensuel (DH)</label>
+                <input type="number" id="sim-versement" class="form-control" value="500" oninput="calculerSimulation()">
+            </div>
+        </div>
+        <div id="sim-resultats" class="mt-4"></div>
+    </div>
+</section>
+
+<div class="modal fade" id="opcvmModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background: var(--primary); color: white;">
+                <h5 class="modal-title" id="opcvm-modal-title"></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="opcvm-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/opcvm-data.js"></script>
+<script>
+let opcvmFiltres = [...opcvmData];
+let chartInstance = null;
+
+function filtrerOPCVM() {
+    const cat = document.getElementById('filtre-categorie').value;
+    const type = document.getElementById('filtre-type').value;
+    const fraisMax = document.getElementById('filtre-frais').value;
+    const capitalMax = document.getElementById('filtre-capital').value;
+
+    opcvmFiltres = opcvmData.filter(f => {
+        if (cat !== 'toutes' && f.categorie !== cat) return false;
+        if (type !== 'tous' && f.type !== type) return false;
+        if (fraisMax !== 'tous' && f.fraisGestion > parseFloat(fraisMax)) return false;
+        if (capitalMax !== 'tous' && f.capitalMinimum > parseFloat(capitalMax)) return false;
+        return true;
+    });
+    afficherOPCVM();
+}
+
+function afficherOPCVM() {
+    const container = document.getElementById('opcvm-container');
+
+    if (opcvmFiltres.length === 0) {
+        container.innerHTML = '<div class="text-center py-5"><h3>Aucun OPCVM ne correspond</h3></div>';
+        return;
+    }
+
+    container.innerHTML = opcvmFiltres.map(f => `
+        <div class="opcvm-card">
+            <div class="opcvm-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <span class="badge bg-secondary mb-2">${f.societe}</span>
+                        <h4 class="mb-1">${f.nom}</h4>
+                        <small class="text-muted">${f.categorie} • Min: ${f.capitalMinimum.toLocaleString()} DH</small>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <span class="frais-badge">Frais: ${f.fraisGestion}%/an</span>
+                        <span class="badge ${f.volatilite === 'Faible' ? 'bg-success' : f.volatilite === 'Moyenne' ? 'bg-warning' : 'bg-danger'} ms-2">
+                            Volatilité: ${f.volatilite}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="row text-center mb-3">
+                    <div class="col-md-3">
+                        <div class="h4 ${f.rendement1An >= 0 ? 'rendement-positif' : 'rendement-negatif'}">${f.rendement1An}%</div>
+                        <small class="text-muted">1 an</small>
+                        <div class="performance-bar mt-1">
+                            <div class="performance-fill" style="width: ${Math.min(Math.abs(f.rendement1An) * 5, 100)}%; background: ${f.rendement1An >= 0 ? '#27ae60' : '#e74c3c'}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="h4 ${f.rendement3Ans >= 0 ? 'rendement-positif' : 'rendement-negatif'}">${f.rendement3Ans}%</div>
+                        <small class="text-muted">3 ans (annuel)</small>
+                        <div class="performance-bar mt-1">
+                            <div class="performance-fill" style="width: ${Math.min(Math.abs(f.rendement3Ans) * 5, 100)}%; background: ${f.rendement3Ans >= 0 ? '#27ae60' : '#e74c3c'}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="h4 ${f.rendement5Ans >= 0 ? 'rendement-positif' : 'rendement-negatif'}">${f.rendement5Ans}%</div>
+                        <small class="text-muted">5 ans (annuel)</small>
+                        <div class="performance-bar mt-1">
+                            <div class="performance-fill" style="width: ${Math.min(Math.abs(f.rendement5Ans) * 5, 100)}%; background: ${f.rendement5Ans >= 0 ? '#27ae60' : '#e74c3c'}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="h4 text-primary">${(f.fraisEntree + f.fraisGestion + f.fraisSortie).toFixed(2)}%</div>
+                        <small class="text-muted">Frais totaux estimés</small>
+                    </div>
+                </div>
+                <p class="text-muted">${f.description}</p>
+                <button class="btn btn-outline-primary" onclick="voirDetailsOPCVM('${f.id}')">
+                    📊 Voir fiche complète
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function voirDetailsOPCVM(id) {
+    const f = opcvmData.find(o => o.id === id);
+    if (!f) return;
+
+    document.getElementById('opcvm-modal-title').textContent = f.nom;
+
+    const fraisTotal = f.fraisEntree + (f.fraisGestion * 5) + f.fraisSortie;
+
+    document.getElementById('opcvm-modal-body').innerHTML = `
+        <div class="row">
+            <div class="col-md-8">
+                <h6 class="text-primary">📈 Performance historique</h6>
+                <canvas id="perfChart" height="200"></canvas>
+
+                <h6 class="text-primary mt-4">💰 Structure des frais</h6>
+                <table class="table table-sm">
+                    <tr><td>Frais d'entrée</td><td class="text-end">${f.fraisEntree}%</td><td>${f.fraisEntree > 0 ? '⚠️ À l\'achat' : '✅ Gratuit'}</td></tr>
+                    <tr><td>Frais de gestion annuels</td><td class="text-end">${f.fraisGestion}%/an</td><td>Déduit du NAV</td></tr>
+                    <tr><td>Frais de sortie</td><td class="text-end">${f.fraisSortie}%</td><td>${f.fraisSortie > 0 ? '⚠️ À la vente' : '✅ Gratuit'}</td></tr>
+                    <tr class="table-warning"><td><strong>Coût total estimé (5 ans)</strong></td><td class="text-end"><strong>${fraisTotal.toFixed(2)}%</strong></td><td>Sur 10k DH = ${(fraisTotal * 100).toFixed(0)} DH</td></tr>
+                </table>
+
+                <h6 class="text-primary mt-4">🎯 Composition du portefeuille</h6>
+                <ul class="list-group">
+                    ${f.composition.map(c => `<li class="list-group-item d-flex justify-content-between"><span>${c.split(' ')[0]}</span><span class="badge bg-primary">${c.split(' ')[1]}</span></li>`).join('')}
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6>Informations clés</h6>
+                        <p><strong>Société de gestion:</strong> ${f.societe}</p>
+                        <p><strong>Benchmark:</strong> ${f.benchmark}</p>
+                        <p><strong>Capital minimum:</strong> ${f.capitalMinimum.toLocaleString()} DH</p>
+                        <p><strong>Volatilité:</strong> <span class="badge ${f.volatilite === 'Faible' ? 'bg-success' : f.volatilite === 'Moyenne' ? 'bg-warning' : 'bg-danger'}">${f.volatilite}</span></p>
+                        <p><strong>Type:</strong> ${f.type}</p>
+                        <a href="${f.urlAMMC}" target="_blank" class="btn btn-sm btn-outline-secondary w-100">Voir sur AMMC</a>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    <strong>💡 Notre avis Dirhami:</strong><br>
+                    ${f.rendement1An > 8 ? 'Fonds performant mais volatil. Convient aux investisseurs avertis.' : 
+                      f.type === 'monetaire' ? 'Sécurité maximale. Idéal pour l\'épargne de précaution.' :
+                      f.type === 'obligations' ? 'Bon compromis rendement/risque. Recommandé pour profils prudents.' :
+                      'Diversification équilibrée. Adapté à la majorité des épargnants.'}
+                </div>
+            </div>
+        </div>
+    `;
+
+    new bootstrap.Modal(document.getElementById('opcvmModal')).show();
+
+    setTimeout(() => {
+        if (chartInstance) chartInstance.destroy();
+        const ctx = document.getElementById('perfChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Début', 'Année 1', 'Année 2', 'Année 3', 'Année 4', 'Année 5'],
+                datasets: [{
+                    label: 'Rendement cumulé %',
+                    data: [0, f.rendement1An, f.rendement1An * 1.8, f.rendement3Ans * 3, f.rendement3Ans * 3.5, f.rendement5Ans * 5],
+                    borderColor: '#1a5f2a',
+                    backgroundColor: 'rgba(26, 95, 42, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+    }, 300);
+}
+
+function calculerSimulation() {
+    const montant = parseFloat(document.getElementById('sim-montant').value) || 0;
+    const duree = parseInt(document.getElementById('sim-duree').value) || 5;
+    const versement = parseFloat(document.getElementById('sim-versement').value) || 0;
+
+    const rendementMoyen = 6.5;
+    const tauxMensuel = rendementMoyen / 100 / 12;
+    const nbMois = duree * 12;
+
+    const valeurFinale = montant * Math.pow(1 + tauxMensuel, nbMois) + 
+        versement * (Math.pow(1 + tauxMensuel, nbMois) - 1) / tauxMensuel;
+
+    const totalVerse = montant + (versement * nbMois);
+    const gains = valeurFinale - totalVerse;
+
+    document.getElementById('sim-resultats').innerHTML = `
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="h3">${totalVerse.toLocaleString()} DH</div>
+                <small>Total versé</small>
+            </div>
+            <div class="col-md-3">
+                <div class="h3 text-success">${valeurFinale.toLocaleString()} DH</div>
+                <small>Valeur finale estimée</small>
+            </div>
+            <div class="col-md-3">
+                <div class="h3 text-warning">+${gains.toLocaleString()} DH</div>
+                <small>Gains estimés</small>
+            </div>
+            <div class="col-md-3">
+                <div class="h3">+${((gains/totalVerse)*100).toFixed(1)}%</div>
+                <small>Performance totale</small>
+            </div>
+        </div>
+        <div class="mt-3 text-center">
+            <small>* Simulation basée sur un rendement moyen de ${rendementMoyen}%/an. Les performances passées ne garantissent pas les futures.</small>
+        </div>
+    `;
+}
+
+filtrerOPCVM();
+calculerSimulation();
+</script>
+</body>
+</html>

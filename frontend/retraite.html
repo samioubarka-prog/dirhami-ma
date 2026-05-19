@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Retraite Maroc | Dirhami</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #1a5f2a; --secondary: #d4af37; --dark: #1a1a2e; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%); color: white; padding: 60px 0; }
+        .result-box { background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 20px; }
+        .pension-box { background: linear-gradient(135deg, var(--primary), #2ecc71); color: white; border-radius: 15px; padding: 25px; text-align: center; }
+        .regime-card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--dark);">
+    <div class="container">
+        <a class="navbar-brand" href="index.html" style="color: var(--secondary); font-weight: bold; font-size: 1.5em;">🇲🇦 DIRHAMI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="cartes-bancaires.html">Cartes</a>
+                <a class="nav-link" href="opcvm.html">OPCVM</a>
+                <a class="nav-link" href="credit-immobilier.html">Crédit</a>
+                <a class="nav-link active" href="retraite.html">Retraite</a>
+                <a class="nav-link" href="budget.html">Budget</a>
+                <a class="nav-link" href="fiscalite.html">Fiscalité</a>
+                <a class="nav-link" href="blog/index.html">Blog</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container text-center">
+        <h1>👴 Simulateur de Planification Retraite</h1>
+        <p class="lead">Calculez votre pension et planifiez votre retraite au Maroc</p>
+    </div>
+</section>
+
+<section class="container my-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card p-4 sticky-top" style="top: 20px;">
+                <h4 class="mb-4">📊 Votre profil</h4>
+
+                <div class="mb-3">
+                    <label>Âge actuel</label>
+                    <input type="number" id="age-actuel" class="form-control" value="35" min="18" max="70" oninput="calculerRetraite()">
+                </div>
+
+                <div class="mb-3">
+                    <label>Âge de départ à la retraite souhaité</label>
+                    <input type="number" id="age-retraite" class="form-control" value="60" min="50" max="70" oninput="calculerRetraite()">
+                </div>
+
+                <div class="mb-3">
+                    <label>Salaire brut mensuel actuel (DH)</label>
+                    <input type="number" id="salaire" class="form-control" value="15000" oninput="calculerRetraite()">
+                </div>
+
+                <div class="mb-3">
+                    <label>Régime de retraite</label>
+                    <select id="regime" class="form-select" onchange="calculerRetraite()">
+                        <option value="cnss">CNSS (Privé)</option>
+                        <option value="cmr">CMR (Fonctionnaire)</option>
+                        <option value="rcar">RCAR (Collectivités)</option>
+                        <option value="independant">Indépendant / Libre</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label>Années de cotisation déjà acquises</label>
+                    <input type="number" id="annees-cotisees" class="form-control" value="10" min="0" max="50" oninput="calculerRetraite()">
+                </div>
+
+                <div class="mb-3">
+                    <label>Épargne retraite actuelle (DH)</label>
+                    <input type="number" id="epargne-actuelle" class="form-control" value="50000" oninput="calculerRetraite()">
+                </div>
+
+                <div class="mb-3">
+                    <label>Versement mensuel retraite (DH)</label>
+                    <input type="number" id="versement-mensuel" class="form-control" value="1000" oninput="calculerRetraite()">
+                </div>
+
+                <div class="mb-3">
+                    <label>Rendement estimé (%/an)</label>
+                    <input type="range" id="rendement" class="form-range" min="2" max="10" step="0.5" value="5" oninput="document.getElementById('rendement-val').textContent=this.value+'%'; calculerRetraite()">
+                    <div class="text-center"><span id="rendement-val">5%</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div id="resultats-retraite"></div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function calculerRetraite() {
+    const ageActuel = parseInt(document.getElementById('age-actuel').value) || 35;
+    const ageRetraite = parseInt(document.getElementById('age-retraite').value) || 60;
+    const salaire = parseFloat(document.getElementById('salaire').value) || 15000;
+    const regime = document.getElementById('regime').value;
+    const anneesCotisees = parseInt(document.getElementById('annees-cotisees').value) || 10;
+    const epargneActuelle = parseFloat(document.getElementById('epargne-actuelle').value) || 50000;
+    const versementMensuel = parseFloat(document.getElementById('versement-mensuel').value) || 1000;
+    const rendement = parseFloat(document.getElementById('rendement').value) || 5;
+
+    const anneesRestantes = ageRetraite - ageActuel;
+    const anneesTotales = anneesCotisees + anneesRestantes;
+
+    // Calcul pension selon régime
+    let pension = 0;
+    let tauxRemplacement = 0;
+    let pensionMinimale = 0;
+
+    switch(regime) {
+        case 'cnss':
+            // CNSS: 50% pour 3240 jours (9 ans), +1% par 216 jours (0.6 an) jusqu'à 70%
+            // Plafond salaire CNSS: 6000 DH
+            const salairePlafonne = Math.min(salaire, 6000);
+            const tauxCNSS = Math.min(50 + (anneesTotales - 9) * 2, 70);
+            pension = salairePlafonne * (tauxCNSS / 100);
+            tauxRemplacement = tauxCNSS;
+            pensionMinimale = 1000;
+            break;
+        case 'cmr':
+            // CMR: 2.5% par an, max 100% (40 ans)
+            const tauxCMR = Math.min(anneesTotales * 2.5, 100);
+            pension = salaire * (tauxCMR / 100);
+            tauxRemplacement = tauxCMR;
+            pensionMinimale = 2000;
+            break;
+        case 'rcar':
+            // RCAR: similaire CNSS
+            const salaireRCAR = Math.min(salaire, 6000);
+            const tauxRCAR = Math.min(50 + (anneesTotales - 9) * 2, 70);
+            pension = salaireRCAR * (tauxRCAR / 100);
+            tauxRemplacement = tauxRCAR;
+            pensionMinimale = 800;
+            break;
+        case 'independant':
+            pension = 0;
+            tauxRemplacement = 0;
+            pensionMinimale = 0;
+            break;
+    }
+
+    pension = Math.max(pension, pensionMinimale);
+
+    // Calcul épargne complémentaire
+    const tauxMensuel = rendement / 100 / 12;
+    const nbMois = anneesRestantes * 12;
+
+    const valeurEpargne = epargneActuelle * Math.pow(1 + tauxMensuel, nbMois) + 
+        versementMensuel * (Math.pow(1 + tauxMensuel, nbMois) - 1) / tauxMensuel;
+
+    // Rente viagère (4% de retrait par an)
+    const renteAnnuelle = valeurEpargne * 0.04;
+    const renteMensuelle = renteAnnuelle / 12;
+
+    const revenuTotal = pension + renteMensuelle;
+    const tauxRemplacementGlobal = (revenuTotal / salaire * 100).toFixed(1);
+
+    // Besoin estimé (70% du salaire actuel)
+    const besoinRetraite = salaire * 0.7;
+    const ecart = besoinRetraite - revenuTotal;
+    const statut = ecart <= 0 ? '✅ Objectif atteint' : `⚠️ Manque ${ecart.toLocaleString()} DH/mois`;
+
+    document.getElementById('resultats-retraite').innerHTML = `
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="pension-box">
+                    <div class="h6">Pension ${regime.toUpperCase()}</div>
+                    <div class="h2">${pension.toLocaleString()} DH</div>
+                    <small>/mois estimé</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="pension-box" style="background: linear-gradient(135deg, #d4af37, #f39c12);">
+                    <div class="h6">Rente épargne complémentaire</div>
+                    <div class="h2">${renteMensuelle.toLocaleString()} DH</div>
+                    <small>/mois estimé</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-box mb-4">
+            <h5>📋 Résumé de votre retraite</h5>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="h3 text-primary">${revenuTotal.toLocaleString()}</div>
+                    <small>Revenu total/mois</small>
+                </div>
+                <div class="col-md-3">
+                    <div class="h3 text-info">${tauxRemplacementGlobal}%</div>
+                    <small>Taux de remplacement</small>
+                </div>
+                <div class="col-md-3">
+                    <div class="h3 text-success">${valeurEpargne.toLocaleString()}</div>
+                    <small>Capital épargné</small>
+                </div>
+                <div class="col-md-3">
+                    <div class="h3 ${ecart <= 0 ? 'text-success' : 'text-danger'}">${statut}</div>
+                    <small>Objectif retraite</small>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Années de cotisation totales:</strong> ${anneesTotales} ans
+                </div>
+                <div class="col-md-6">
+                    <strong>Besoin estimé (70% salaire):</strong> ${besoinRetraite.toLocaleString()} DH/mois
+                </div>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <h5>📊 Évolution de votre épargne retraite</h5>
+            <canvas id="epargneChart" height="200"></canvas>
+        </div>
+
+        <div class="result-box mt-4">
+            <h5>💡 Recommandations Dirhami</h5>
+            <ul class="list-group list-group-flush">
+                ${ecart > 0 ? `<li class="list-group-item">⚠️ Augmentez votre versement mensuel de ${versementMensuel} DH à ${(versementMensuel + ecart * 0.6).toFixed(0)} DH pour combler l'écart</li>` : '<li class="list-group-item">✅ Votre planification retraite est optimale !</li>'}
+                <li class="list-group-item">📈 Diversifiez votre épargne entre OPCVM actions (long terme) et obligations (stabilité)</li>
+                <li class="list-group-item">🏦 Adhérez à la CIMR pour une retraite complémentaire avec avantages fiscaux</li>
+                <li class="list-group-item">📋 Pensez à l'assurance vie pour transmettre votre capital aux héritiers</li>
+            </ul>
+        </div>
+    `;
+
+    // Graphique
+    setTimeout(() => {
+        const ctx = document.getElementById('epargneChart').getContext('2d');
+        const labels = [];
+        const dataEpargne = [];
+        const dataPension = [];
+
+        for (let i = 0; i <= anneesRestantes; i++) {
+            labels.push(ageActuel + i);
+            const mois = i * 12;
+            const val = epargneActuelle * Math.pow(1 + tauxMensuel, mois) + 
+                versementMensuel * (Math.pow(1 + tauxMensuel, mois) - 1) / tauxMensuel;
+            dataEpargne.push(val);
+            dataPension.push(pension * 12 * i); // Cumul des pensions (simplifié)
+        }
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Capital épargne',
+                        data: dataEpargne,
+                        borderColor: '#1a5f2a',
+                        backgroundColor: 'rgba(26, 95, 42, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Cumul pensions (estimé)',
+                        data: dataPension,
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'top' } } }
+        });
+    }, 100);
+}
+
+calculerRetraite();
+</script>
+</body>
+</html>
