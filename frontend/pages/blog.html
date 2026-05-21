@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Financier - Dirhami</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-coins"></i>
+                <span>Dirhami</span>
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="cartes.html"><i class="fas fa-credit-card"></i> Cartes Bancaires</a></li>
+                <li><a href="credit.html"><i class="fas fa-house"></i> Crédit Immobilier</a></li>
+                <li><a href="opcvm.html"><i class="fas fa-chart-line"></i> OPCVM</a></li>
+                <li><a href="retraite.html"><i class="fas fa-piggy-bank"></i> Retraite</a></li>
+                <li><a href="budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="fiscalite.html"><i class="fas fa-file-invoice-dollar"></i> Fiscalité</a></li>
+                <li><a href="blog.html" class="active"><i class="fas fa-newspaper"></i> Blog</a></li>
+                <li class="nav-auth">
+                    <a href="login.html" class="btn btn-outline"><i class="fas fa-user"></i> Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-newspaper"></i> Blog Financier</h1>
+            <p>Conseils, analyses et actualités pour optimiser vos finances au Maroc</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="services-grid" style="padding: 40px 0;">
+            <article class="service-card">
+                <div style="height: 200px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-credit-card" style="font-size: 4rem; color: white; opacity: 0.8;"></i>
+                </div>
+                <div style="padding: 24px;">
+                    <span class="tag tag-info" style="margin-bottom: 12px; display: inline-block;">Cartes Bancaires</span>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Comment choisir sa carte bancaire au Maroc ?</h3>
+                    <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px;">Guide complet pour choisir la carte bancaire adaptée à votre profil : frais, assurances, cashback et avantages.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: var(--gray-500); font-size: 0.85rem;">
+                        <span><i class="fas fa-calendar"></i> 15 Mai 2026</span>
+                        <span><i class="fas fa-clock"></i> 5 min de lecture</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <div style="height: 200px; background: linear-gradient(135deg, var(--secondary), var(--secondary-light)); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-house" style="font-size: 4rem; color: var(--dark); opacity: 0.8;"></i>
+                </div>
+                <div style="padding: 24px;">
+                    <span class="tag tag-warning" style="margin-bottom: 12px; display: inline-block;">Immobilier</span>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Crédit immobilier 2026 : les taux les plus bas de l'histoire</h3>
+                    <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px;">Analyse des taux de crédit immobilier au Maroc en 2026 et conseils pour obtenir la meilleure offre.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: var(--gray-500); font-size: 0.85rem;">
+                        <span><i class="fas fa-calendar"></i> 10 Mai 2026</span>
+                        <span><i class="fas fa-clock"></i> 8 min de lecture</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <div style="height: 200px; background: linear-gradient(135deg, var(--dark), var(--dark-light)); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-chart-line" style="font-size: 4rem; color: white; opacity: 0.8;"></i>
+                </div>
+                <div style="padding: 24px;">
+                    <span class="tag tag-success" style="margin-bottom: 12px; display: inline-block;">Investissement</span>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">OPCVM vs Actions directes : que choisir ?</h3>
+                    <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px;">Comparaison des avantages fiscaux et des performances entre OPCVM et investissement direct en actions.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: var(--gray-500); font-size: 0.85rem;">
+                        <span><i class="fas fa-calendar"></i> 5 Mai 2026</span>
+                        <span><i class="fas fa-clock"></i> 6 min de lecture</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <div style="height: 200px; background: linear-gradient(135deg, #e63946, #c0392b); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-piggy-bank" style="font-size: 4rem; color: white; opacity: 0.8;"></i>
+                </div>
+                <div style="padding: 24px;">
+                    <span class="tag tag-info" style="margin-bottom: 12px; display: inline-block;">Retraite</span>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Planifier sa retraite à 30 ans : pourquoi c'est crucial</h3>
+                    <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px;">Les avantages de commencer tôt et l'impact de la capitalisation composée sur votre capital retraite.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: var(--gray-500); font-size: 0.85rem;">
+                        <span><i class="fas fa-calendar"></i> 1 Mai 2026</span>
+                        <span><i class="fas fa-clock"></i> 4 min de lecture</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <div style="height: 200px; background: linear-gradient(135deg, #17a2b8, #138496); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-file-invoice-dollar" style="font-size: 4rem; color: white; opacity: 0.8;"></i>
+                </div>
+                <div style="padding: 24px;">
+                    <span class="tag tag-warning" style="margin-bottom: 12px; display: inline-block;">Fiscalité</span>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">PEA Maroc : tout savoir sur le Plan d'Épargne Actions</h3>
+                    <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px;">Guide complet sur le PEA au Maroc : conditions, avantages fiscaux, et comment l'ouvrir.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: var(--gray-500); font-size: 0.85rem;">
+                        <span><i class="fas fa-calendar"></i> 28 Avr 2026</span>
+                        <span><i class="fas fa-clock"></i> 7 min de lecture</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <div style="height: 200px; background: linear-gradient(135deg, #6f42c1, #5a32a3); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-wallet" style="font-size: 4rem; color: white; opacity: 0.8;"></i>
+                </div>
+                <div style="padding: 24px;">
+                    <span class="tag tag-success" style="margin-bottom: 12px; display: inline-block;">Budget</span>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">La règle 50/30/20 : budgeter comme un pro</h3>
+                    <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px;">Comment appliquer la règle 50/30/20 à votre budget marocain et atteindre vos objectifs d'épargne.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: var(--gray-500); font-size: 0.85rem;">
+                        <span><i class="fas fa-calendar"></i> 20 Avr 2026</span>
+                        <span><i class="fas fa-clock"></i> 5 min de lecture</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2026 Dirhami. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

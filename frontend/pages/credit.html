@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Crédit Immobilier - Dirhami</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-coins"></i>
+                <span>Dirhami</span>
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="cartes.html"><i class="fas fa-credit-card"></i> Cartes Bancaires</a></li>
+                <li><a href="credit.html" class="active"><i class="fas fa-house"></i> Crédit Immobilier</a></li>
+                <li><a href="opcvm.html"><i class="fas fa-chart-line"></i> OPCVM</a></li>
+                <li><a href="retraite.html"><i class="fas fa-piggy-bank"></i> Retraite</a></li>
+                <li><a href="budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="fiscalite.html"><i class="fas fa-file-invoice-dollar"></i> Fiscalité</a></li>
+                <li><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+                <li class="nav-auth">
+                    <a href="login.html" class="btn btn-outline"><i class="fas fa-user"></i> Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-house"></i> Simulateur de Crédit Immobilier</h1>
+            <p>Calculez vos mensualités, votre tableau d'amortissement et comparez les offres des banques marocaines</p>
+        </div>
+    </header>
+
+    <main class="container simulator-full">
+        <div class="simulator-layout">
+            <!-- Formulaire -->
+            <div class="simulator-panel">
+                <h3><i class="fas fa-calculator"></i> Paramètres du crédit</h3>
+
+                <div class="form-section">
+                    <div class="form-section-title">Le bien immobilier</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prix du bien (DH)</label>
+                            <input type="number" id="propertyPrice" value="800000" min="100000" step="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Apport personnel (%)</label>
+                            <input type="number" id="downPayment" value="20" min="0" max="100" step="5">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">Conditions du crédit</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Durée (années)</label>
+                            <input type="number" id="duration" value="20" min="5" max="30" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Taux d'intérêt (%)</label>
+                            <input type="number" id="interestRate" value="4.65" min="1" max="10" step="0.05">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Taux assurance décès (%)</label>
+                            <input type="number" id="insuranceRate" value="0.43" min="0" max="2" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Revenu mensuel net (DH)</label>
+                            <input type="number" id="income" value="15000" min="3000" step="500">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-lg w-full" onclick="calculateMortgage()">
+                    <i class="fas fa-calculator"></i> Calculer mon crédit
+                </button>
+            </div>
+
+            <!-- Résultats -->
+            <div class="simulator-panel results-panel">
+                <h3><i class="fas fa-chart-pie"></i> Résultats de la simulation</h3>
+
+                <div id="mortgageResults">
+                    <div class="result-card">
+                        <div class="result-card-label">Mensualité crédit</div>
+                        <div class="result-card-value" id="monthlyPayment">5 379 DH</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Mensualité assurance</div>
+                        <div class="result-card-value" id="insuranceMonthly">230 DH</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Mensualité totale</div>
+                        <div class="result-card-value warning" id="totalMonthly">5 609 DH</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Taux d'endettement</div>
+                        <div class="result-card-value" id="debtRatio">37.4%</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Montant emprunté</div>
+                        <div class="result-card-value" id="loanAmount">640 000 DH</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Coût total du crédit</div>
+                        <div class="result-card-value danger" id="totalCost">1 346 160 DH</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Intérêts totaux</div>
+                        <div class="result-card-value" id="totalInterest">706 160 DH</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">TAEG estimé</div>
+                        <div class="result-card-value" id="taeg">5.08%</div>
+                    </div>
+
+                    <div id="eligibilityAlert" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Votre dossier est éligible ! Taux d'endettement dans les normes.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphiques -->
+        <div class="chart-container">
+            <h3><i class="fas fa-chart-area"></i> Répartition du coût total</h3>
+            <canvas id="costChart" height="300"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3><i class="fas fa-table"></i> Tableau d'amortissement (extrait annuel)</h3>
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table" id="amortizationTable">
+                    <thead>
+                        <tr>
+                            <th>Année</th>
+                            <th>Mensualité</th>
+                            <th>Capital remboursé</th>
+                            <th>Intérêts</th>
+                            <th>Assurance</th>
+                            <th>Capital restant dû</th>
+                        </tr>
+                    </thead>
+                    <tbody id="amortizationBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Comparaison banques -->
+        <div class="chart-container">
+            <h3><i class="fas fa-university"></i> Comparer les offres des banques</h3>
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Sélectionnez les banques à comparer</label>
+                    <select id="compareBanks" multiple size="5">
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="compareBanks()">
+                    <i class="fas fa-balance-scale"></i> Comparer
+                </button>
+            </div>
+            <div id="banksComparison"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2026 Dirhami. Tous droits réservés. | Made with <i class="fas fa-heart"></i> au Maroc</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/pages/credit.js"></script>
+</body>
+</html>
