@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Fiscalité et Épargne - Dirhami</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-coins"></i>
+                <span>Dirhami</span>
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="cartes.html"><i class="fas fa-credit-card"></i> Cartes Bancaires</a></li>
+                <li><a href="credit.html"><i class="fas fa-house"></i> Crédit Immobilier</a></li>
+                <li><a href="opcvm.html"><i class="fas fa-chart-line"></i> OPCVM</a></li>
+                <li><a href="retraite.html"><i class="fas fa-piggy-bank"></i> Retraite</a></li>
+                <li><a href="budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="fiscalite.html" class="active"><i class="fas fa-file-invoice-dollar"></i> Fiscalité</a></li>
+                <li><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+                <li class="nav-auth">
+                    <a href="login.html" class="btn btn-outline"><i class="fas fa-user"></i> Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-file-invoice-dollar"></i> Guide Fiscalité et Épargne</h1>
+            <p>Découvrez les régimes fiscaux disponibles au Maroc pour optimiser votre épargne et réduire vos impôts</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Calculateur de déduction -->
+        <div class="simulator-card" style="margin: 40px 0;">
+            <div class="simulator-form">
+                <h3><i class="fas fa-calculator"></i> Calculateur de déduction fiscale</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Régime fiscal</label>
+                        <select id="taxRegimeSelect">
+                            <option value="DEDUCTION_IR_HABITAT">Déduction IR - Intérêts emprunt habitat</option>
+                            <option value="DEDUCTION_IR_RETRAITE">Déduction IR - Cotisations retraite</option>
+                            <option value="DEDUCTION_IR_ASSURANCE_VIE">Déduction IR - Primes assurance vie</option>
+                            <option value="PEA_MA">PEA Maroc</option>
+                            <option value="PER_MA">Plan Épargne Retraite (PER)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Montant concerné (DH/an)</label>
+                        <input type="number" id="taxAmount" value="30000" min="0" step="1000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Revenu annuel brut (DH)</label>
+                    <input type="number" id="annualIncome" value="180000" min="0" step="10000">
+                </div>
+                <button class="btn btn-primary" onclick="calculateTaxDeduction()">
+                    <i class="fas fa-calculator"></i> Calculer l'économie d'impôt
+                </button>
+            </div>
+            <div class="simulator-results" id="taxResults">
+                <div class="result-item">
+                    <span class="result-label">Taux de déduction</span>
+                    <span class="result-value" id="deductionRate">20%</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Déduction calculée</span>
+                    <span class="result-value" id="calculatedDeduction">6 000 DH</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Déduction plafonnée</span>
+                    <span class="result-value" id="maxDeduction">10 800 DH</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Déduction applicable</span>
+                    <span class="result-value" id="actualDeduction">6 000 DH</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Économie d'impôt</span>
+                    <span class="result-value" id="taxSavings">1 800 DH</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Rendement fiscal effectif</span>
+                    <span class="result-value" id="effectiveReturn">6%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grille des régimes -->
+        <h2 class="section-title">Les régimes fiscaux au Maroc</h2>
+        <div class="tax-grid" id="taxGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2026 Dirhami. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/pages/fiscalite.js"></script>
+</body>
+</html>
