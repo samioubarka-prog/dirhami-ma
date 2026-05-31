@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Régimes d'Épargne et Fiscalité Maroc - Dirhami</title>
+    <meta name="description" content="Découvrez les régimes d'épargne au Maroc : PEA, assurance-vie, PER. Optimisez votre fiscalité et préparez votre avenir.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">د.م</div>
+                Dirhami
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/cartes-bancaires">Cartes Bancaires</a></li>
+                <li><a href="/credit-immobilier">Crédit Immobilier</a></li>
+                <li><a href="/opcvm">OPCVM</a></li>
+                <li><a href="/retraite">Retraite</a></li>
+                <li><a href="/budget">Budget</a></li>
+                <li><a href="/regimes-epargne" class="active">Épargne & Impôts</a></li>
+                <li><a href="/contact" class="nav-cta">Contact</a></li>
+            </ul>
+            <button class="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="simulator-page">
+        <div class="simulator-header">
+            <div class="container">
+                <h1><i class="fas fa-shield-halved"></i> Régimes d'Épargne & Fiscalité</h1>
+                <p>Optimisez votre épargne et réduisez vos impôts au Maroc</p>
+            </div>
+        </div>
+
+        <div class="simulator-container">
+            <aside class="simulator-sidebar">
+                <h3><i class="fas fa-calculator"></i> Simulateur fiscal</h3>
+
+                <div class="form-group">
+                    <label>Revenu annuel brut (MAD)</label>
+                    <div class="input-suffix">
+                        <input type="number" id="revenu-brut" value="180000" min="0" step="10000">
+                        <span>MAD</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Charges déductibles (MAD)</label>
+                    <div class="input-suffix">
+                        <input type="number" id="charges-deductibles" value="0" min="0" step="1000">
+                        <span>MAD</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Versement épargne retraite (MAD/an)</label>
+                    <div class="input-suffix">
+                        <input type="number" id="versement-retraite" value="30000" min="0" step="1000">
+                        <span>MAD</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Versement PEA (MAD/an)</label>
+                    <div class="input-suffix">
+                        <input type="number" id="versement-pea" value="0" min="0" step="1000">
+                        <span>MAD</span>
+                    </div>
+                </div>
+
+                <button class="btn-calculate" onclick="calculerFiscalite()">
+                    <i class="fas fa-calculator"></i> Calculer
+                </button>
+            </aside>
+
+            <div class="simulator-results">
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Important</h4>
+                    <p>Au Maroc, l'IR (Impôt sur le Revenu) est progressif de 0% à 38%. Les versements sur certains produits d'épargne retraite sont déductibles du revenu imposable jusqu'à 10% du RNB (Revenu Net Brut), dans la limite de 50 000 MAD/an.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="result-card" style="text-align: center;">
+                        <h3>Revenu imposable</h3>
+                        <div class="result-highlight" id="revenu-imposable">150 000 MAD</div>
+                    </div>
+                    <div class="result-card" style="text-align: center;">
+                        <h3>Impôt avant optimisation</h3>
+                        <div class="result-highlight danger" id="impot-avant">28 500 MAD</div>
+                    </div>
+                    <div class="result-card" style="text-align: center;">
+                        <h3>Impôt après optimisation</h3>
+                        <div class="result-highlight success" id="impot-apres">21 000 MAD</div>
+                    </div>
+                    <div class="result-card" style="text-align: center;">
+                        <h3>Économie d'impôt</h3>
+                        <div class="result-highlight" id="economie-impot">7 500 MAD</div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3><i class="fas fa-chart-pie"></i> Répartition de l'impôt</h3>
+                    <div class="chart-container" style="max-height: 350px;">
+                        <canvas id="chart-impot"></canvas>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3><i class="fas fa-university"></i> Les régimes d'épargne au Maroc</h3>
+
+                    <div class="regime-card">
+                        <span class="regime-badge">Populaire</span>
+                        <h3><i class="fas fa-piggy-bank"></i> Plan d'Épargne Retraite (PER)</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 1rem;">Le PER est le principal produit d'épargne retraite au Maroc. Il permet de constituer un capital pour la retraite tout en bénéficiant d'avantages fiscaux.</p>
+                        <ul class="regime-features">
+                            <li>Déduction fiscale jusqu'à 10% du RNB (max 50 000 MAD/an)</li>
+                            <li>Versements flexibles (ponctuels ou réguliers)</li>
+                            <li>Capital ou rente viagère au choix</li>
+                            <li>Transmission aux héritiers</li>
+                            <li>Gestion par des sociétés de gestion agréées</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius);">
+                            <strong style="color: var(--primary);">Avantages fiscaux :</strong>
+                            <p style="font-size: 0.9rem; color: var(--gray-600); margin-top: 0.5rem;">Les versements sont déductibles du revenu imposable. À la sortie, seuls les gains sont imposés à 20% (au lieu de votre tranche marginale d'IR).</p>
+                        </div>
+                    </div>
+
+                    <div class="regime-card">
+                        <h3><i class="fas fa-chart-line"></i> Plan d'Épargne en Actions (PEA)</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 1rem;">Le PEA marocain permet d'investir en actions cotées à la Bourse de Casablanca avec des avantages fiscaux sur les plus-values.</p>
+                        <ul class="regime-features">
+                            <li>Plafond de versement : 300 000 MAD</li>
+                            <li>Exonération d'IR sur les plus-values après 5 ans de détention</li>
+                            <li>Prélèvement forfaitaire de 15% avant 5 ans</li>
+                            <li>Investissement obligatoire en actions marocaines</li>
+                            <li>Gestion possible en direct ou via OPCVM</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius);">
+                            <strong style="color: var(--primary);">Avantages fiscaux :</strong>
+                            <p style="font-size: 0.9rem; color: var(--gray-600); margin-top: 0.5rem;">Après 5 ans, les plus-values et dividendes sont exonérés d'IR. C'est l'un des meilleurs outils pour investir en Bourse de Casablanca.</p>
+                        </div>
+                    </div>
+
+                    <div class="regime-card">
+                        <h3><i class="fas fa-umbrella"></i> Assurance-Vie</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 1rem;">L'assurance-vie au Maroc combine protection et épargne. Elle offre des avantages fiscaux et successoraux.</p>
+                        <ul class="regime-features">
+                            <li>Capital garanti à l'échéance</li>
+                            <li>Protection en cas de décès ou d'invalidité</li>
+                            <li>Exonération des droits de succession</li>
+                            <li>Versements programmés possibles</li>
+                            <li>Multi-supports (euro, unités de compte)</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius);">
+                            <strong style="color: var(--primary);">Avantages fiscaux :</strong>
+                            <p style="font-size: 0.9rem; color: var(--gray-600); margin-top: 0.5rem;">Les bénéficiaires désignés sont exonérés des droits de succession. Les gains sont imposés à un taux forfaitaire avantageux.</p>
+                        </div>
+                    </div>
+
+                    <div class="regime-card">
+                        <h3><i class="fas fa-building-columns"></i> Compte sur Livret (CSL)</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 1rem;">Le CSL est un placement sécurisé proposé par les banques marocaines avec un taux d'intérêt garanti.</p>
+                        <ul class="regime-features">
+                            <li>Capital 100% garanti</li>
+                            <li>Taux fixe ou révisable</li>
+                            <li>Liquidité à tout moment</li>
+                            <li>Plafond souvent de 100 000 MAD</li>
+                            <li>Intérêts soumis à un prélèvement forfaitaire de 30%</li>
+                        </ul>
+                    </div>
+
+                    <div class="regime-card">
+                        <h3><i class="fas fa-mosque"></i> Finance Participative</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 1rem;">Pour les investisseurs souhaitant respecter les principes de la Charia, plusieurs produits participatifs existent au Maroc.</p>
+                        <ul class="regime-features">
+                            <li>Mourabaha (crédit à la consommation et immobilier)</li>
+                            <li>Moudaraba (participation aux bénéfices)</li>
+                            <li>Ijara (crédit-bail)</li>
+                            <li>OPCVM islamiques disponibles</li>
+                            <li>5 banques participatives au Maroc</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3><i class="fas fa-table"></i> Barème de l'IR au Maroc (2026)</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Tranche de revenu annuel (MAD)</th>
+                                    <th>Taux d'imposition</th>
+                                    <th>Montant de l'impôt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>0 - 30 000</td><td>0%</td><td>0 MAD</td></tr>
+                                <tr><td>30 001 - 50 000</td><td>10%</td><td>2 000 MAD + 10% de l'excédent</td></tr>
+                                <tr><td>50 001 - 60 000</td><td>20%</td><td>4 000 MAD + 20% de l'excédent</td></tr>
+                                <tr><td>60 001 - 80 000</td><td>30%</td><td>6 000 MAD + 30% de l'excédent</td></tr>
+                                <tr><td>80 001 - 180 000</td><td>34%</td><td>12 000 MAD + 34% de l'excédent</td></tr>
+                                <tr><td>> 180 000</td><td>38%</td><td>46 000 MAD + 38% de l'excédent</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3><i class="fas fa-lightbulb"></i> Conseils pour optimiser votre fiscalité</h3>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <h4>Maximisez la déduction PER</h4>
+                            <p>Versez jusqu'à 10% de votre RNB (max 50 000 MAD/an) sur un PER pour réduire votre base imposable.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>Ouvrez un PEA</h4>
+                            <p>Investissez jusqu'à 300 000 MAD en actions marocaines. Les plus-values sont exonérées après 5 ans.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>Déduisez les intérêts d'emprunt</h4>
+                            <p>Les intérêts de votre crédit immobilier principal sont déductibles jusqu'à 10% du RNB.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>Profitez des charges de famille</h4>
+                            <p>Déduisez 360 MAD par personne à charge (conjoint, enfants, ascendants) de votre revenu imposable.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>Assurance-vie pour la transmission</h4>
+                            <p>Désignez des bénéficiaires sur votre assurance-vie pour exonérer vos héritiers des droits de succession.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>Consultez un expert-comptable</h4>
+                            <p>Pour les situations complexes, un expert-comptable peut vous aider à optimiser votre fiscalité légalement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border: none; padding-top: 0;">
+                <p>© 2026 Dirhami. Les informations fiscales sont données à titre indicatif. Consultez un conseiller pour votre situation personnelle.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        let chartImpot = null;
+
+        function calculerFiscalite() {
+            const revenuBrut = parseFloat(document.getElementById('revenu-brut').value) || 0;
+            const charges = parseFloat(document.getElementById('charges-deductibles').value) || 0;
+            const versementRetraite = parseFloat(document.getElementById('versement-retraite').value) || 0;
+            const versementPEA = parseFloat(document.getElementById('versement-pea').value) || 0;
+
+            // Revenu imposable avant optimisation
+            const revenuImposableAvant = Math.max(0, revenuBrut - charges);
+            const impotAvant = calculerIR(revenuImposableAvant);
+
+            // Revenu imposable après optimisation
+            const deductionRetraite = Math.min(versementRetraite, revenuBrut * 0.10, 50000);
+            const revenuImposableApres = Math.max(0, revenuBrut - charges - deductionRetraite);
+            const impotApres = calculerIR(revenuImposableApres);
+
+            const economie = impotAvant - impotApres;
+
+            document.getElementById('revenu-imposable').textContent = formatMAD(revenuImposableApres);
+            document.getElementById('impot-avant').textContent = formatMAD(impotAvant);
+            document.getElementById('impot-apres').textContent = formatMAD(impotApres);
+
+            const ecoEl = document.getElementById('economie-impot');
+            ecoEl.textContent = formatMAD(economie);
+            ecoEl.className = 'result-highlight ' + (economie > 0 ? 'success' : '');
+
+            afficherGraphiqueImpot(revenuImposableApres, impotApres, versementRetraite + versementPEA);
+        }
+
+        function calculerIR(revenu) {
+            if (revenu <= 30000) return 0;
+            if (revenu <= 50000) return (revenu - 30000) * 0.10;
+            if (revenu <= 60000) return 2000 + (revenu - 50000) * 0.20;
+            if (revenu <= 80000) return 4000 + (revenu - 60000) * 0.30;
+            if (revenu <= 180000) return 10000 + (revenu - 80000) * 0.34;
+            return 44000 + (revenu - 180000) * 0.38;
+        }
+
+        function afficherGraphiqueImpot(revenu, impot, epargne) {
+            const ctx = document.getElementById('chart-impot').getContext('2d');
+            if (chartImpot) chartImpot.destroy();
+
+            chartImpot = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Revenu net après impôt', 'Impôt sur le revenu', 'Épargne optimisée'],
+                    datasets: [{
+                        data: [revenu - impot, impot, epargne],
+                        backgroundColor: ['#1e3a5f', '#dc2626', '#059669'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = ((context.raw / total) * 100).toFixed(1);
+                                    return context.label + ': ' + formatMAD(context.raw) + ' (' + pct + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            calculerFiscalite();
+        });
+    </script>
+</body>
+</html>
