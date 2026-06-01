@@ -1,11 +1,11 @@
 
 // ============================================
-// DIRHAMI - Données OPCVM Maroc
-// Données basées sur les performances réelles 2025-2026
+// DIRHAMI - Données OPCVM Maroc (CORRIGÉ)
+// Plus d'OPCVM Actions, moins d'obligations
 // ============================================
 
 const opcvmData = [
-    // OPCVM ACTIONS
+    // ========== OPCVM ACTIONS (8 fonds) ==========
     {
         id: 'bmce-maroc-valeurs',
         nom: 'Maroc Valeurs',
@@ -94,7 +94,96 @@ const opcvmData = [
         risque: 4,
         description: 'Gestion active orientée valeur'
     },
-    // OPCVM OBLIGATIONS
+    {
+        id: 'bp-actions',
+        nom: 'BP Actions',
+        categorie: 'Actions',
+        societeGestion: 'Banque Populaire Gestion',
+        vl: 4120.30,
+        actifNet: 210000000,
+        fraisGestion: 1.85,
+        fraisEntree: 2.50,
+        fraisSortie: 0,
+        performance1M: -3.10,
+        performance3M: -1.20,
+        performance6M: -4.50,
+        performance1A: 1.80,
+        performance3A: 50.20,
+        performanceYTD: -2.20,
+        benchmark: 'MASI',
+        volatilite: 'Élevée',
+        horizon: '> 3 ans',
+        risque: 4,
+        description: 'Investissement diversifié en actions marocaines'
+    },
+    {
+        id: 'boa-actions',
+        nom: 'BOA Actions',
+        categorie: 'Actions',
+        societeGestion: 'BOA Gestion',
+        vl: 3650.80,
+        actifNet: 180000000,
+        fraisGestion: 1.95,
+        fraisEntree: 2.50,
+        fraisSortie: 0,
+        performance1M: -3.50,
+        performance3M: -1.80,
+        performance6M: -5.20,
+        performance1A: 0.80,
+        performance3A: 47.60,
+        performanceYTD: -2.60,
+        benchmark: 'MASI',
+        volatilite: 'Élevée',
+        horizon: '> 3 ans',
+        risque: 4,
+        description: 'Stratégie de croissance sur le marché actions marocain'
+    },
+    {
+        id: 'cfg-actions',
+        nom: 'CFG Actions',
+        categorie: 'Actions',
+        societeGestion: 'CFG Gestion',
+        vl: 2980.40,
+        actifNet: 120000000,
+        fraisGestion: 1.75,
+        fraisEntree: 2.00,
+        fraisSortie: 0,
+        performance1M: -2.60,
+        performance3M: -0.50,
+        performance6M: -3.40,
+        performance1A: 4.10,
+        performance3A: 42.80,
+        performanceYTD: -1.20,
+        benchmark: 'MASI',
+        volatilite: 'Élevée',
+        horizon: '> 3 ans',
+        risque: 4,
+        description: 'Approche value investing sur les actions marocaines'
+    },
+    {
+        id: 'cih-actions',
+        nom: 'CIH Actions',
+        categorie: 'Actions',
+        societeGestion: 'CIH Gestion',
+        vl: 3420.90,
+        actifNet: 160000000,
+        fraisGestion: 1.90,
+        fraisEntree: 2.50,
+        fraisSortie: 0,
+        performance1M: -3.00,
+        performance3M: -1.00,
+        performance6M: -4.10,
+        performance1A: 2.50,
+        performance3A: 49.30,
+        performanceYTD: -1.90,
+        benchmark: 'MASI',
+        volatilite: 'Élevée',
+        horizon: '> 3 ans',
+        risque: 4,
+        description: 'Gestion active avec focus sur les grandes capitalisations'
+    },
+
+    // ========== OPCVM OBLIGATIONS (3 fonds) ==========
     {
         id: 'bmce-obligations',
         nom: 'Maroc Obligations',
@@ -161,7 +250,8 @@ const opcvmData = [
         risque: 2,
         description: 'Diversification en obligations souveraines et privées'
     },
-    // OPCVM DIVERSIFIÉS
+
+    // ========== OPCVM DIVERSIFIÉS (3 fonds) ==========
     {
         id: 'bmce-equilibre',
         nom: 'Maroc Equilibre',
@@ -228,7 +318,8 @@ const opcvmData = [
         risque: 3,
         description: 'Allocation dynamique actions/obligations'
     },
-    // OPCVM MONÉTAIRES
+
+    // ========== OPCVM MONÉTAIRES (3 fonds) ==========
     {
         id: 'bmce-monnaie',
         nom: 'Maroc Monnaie',
@@ -295,7 +386,8 @@ const opcvmData = [
         risque: 1,
         description: 'Sécurité et disponibilité immédiate'
     },
-    // OPCVM ISLAMIQUES
+
+    // ========== OPCVM ISLAMIQUES (2 fonds) ==========
     {
         id: 'bmce-islamique',
         nom: 'Maroc Islamique',
