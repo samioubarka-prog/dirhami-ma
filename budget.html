@@ -235,7 +235,8 @@
         let chartBudget = null;
         let chartEpargneProj = null;
 
-        const categories = {
+        // Catégories de budget
+const categories = {
             loyer: { nom: 'Logement', icon: '🏠', couleur: '#1e3a5f', type: 'besoin' },
             factures: { nom: 'Factures', icon: '💡', couleur: '#2c5282', type: 'besoin' },
             transport: { nom: 'Transport', icon: '🚗', couleur: '#0d9488', type: 'besoin' },
@@ -324,7 +325,7 @@
             if (reste > 0) {
                 data.push(reste);
                 labels.push('💰 Épargne');
-                colors.push('#059669';
+                colors.push('#059669');
             }
 
             chartBudget = new Chart(ctx, {
