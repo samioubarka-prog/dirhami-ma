@@ -9,18 +9,25 @@ from datetime import datetime
 
 app = FastAPI(title="Dirhami", description="Plateforme financiere Maroc")
 
+# Determine le repertoire de base
 BASE_DIR = Path(__file__).parent
 
+# Creer les dossiers s'ils n'existent pas
 (BASE_DIR / "images").mkdir(exist_ok=True)
 (BASE_DIR / "data").mkdir(exist_ok=True)
 
+# Fichier pour stocker les messages
 MESSAGES_FILE = BASE_DIR / "data" / "messages.json"
 
+# Mount static files
 app.mount("/css", StaticFiles(directory=str(BASE_DIR / "css")), name="css")
 app.mount("/js", StaticFiles(directory=str(BASE_DIR / "js")), name="js")
 app.mount("/images", StaticFiles(directory=str(BASE_DIR / "images")), name="images")
 
+# Templates
 templates = Jinja2Templates(directory=str(BASE_DIR))
+
+# === ROUTES PRINCIPALES ===
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -54,6 +61,8 @@ async def regimes(request: Request):
 async def contact(request: Request):
     return templates.TemplateResponse("contact.html", {"request": request})
 
+# === API CONTACT ===
+
 @app.post("/api/contact")
 async def submit_contact(
     nom: str = Form(...),
@@ -61,6 +70,9 @@ async def submit_contact(
     sujet: str = Form(...),
     message: str = Form(...)
 ):
+    """Recevoir un message de contact et le stocker"""
+
+    # Charger les messages existants
     messages = []
     if MESSAGES_FILE.exists():
         with open(MESSAGES_FILE, 'r', encoding='utf-8') as f:
@@ -69,6 +81,7 @@ async def submit_contact(
             except:
                 messages = []
 
+    # Ajouter le nouveau message
     new_message = {
         "id": len(messages) + 1,
         "nom": nom,
@@ -80,6 +93,7 @@ async def submit_contact(
     }
     messages.append(new_message)
 
+    # Sauvegarder
     with open(MESSAGES_FILE, 'w', encoding='utf-8') as f:
         json.dump(messages, f, ensure_ascii=False, indent=2)
 
@@ -91,6 +105,7 @@ async def submit_contact(
 
 @app.get("/api/messages")
 async def get_messages():
+    """Recuperer tous les messages (pour toi, admin)"""
     if not MESSAGES_FILE.exists():
         return JSONResponse({"messages": []})
 
@@ -102,6 +117,7 @@ async def get_messages():
 
     return JSONResponse({"messages": messages})
 
+# Health check
 @app.get("/health")
 async def health():
     return {"status": "ok"}
