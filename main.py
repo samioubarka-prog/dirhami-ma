@@ -1,25 +1,25 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pathlib import Path
 import os
+import json
+from datetime import datetime
 
 app = FastAPI(title="Dirhami", description="Plateforme financiere Maroc")
 
-# Determine le repertoire de base
 BASE_DIR = Path(__file__).parent
 
-# Creer les dossiers s'ils n'existent pas (evite l'erreur Render)
 (BASE_DIR / "images").mkdir(exist_ok=True)
 (BASE_DIR / "data").mkdir(exist_ok=True)
 
-# Mount static files
+MESSAGES_FILE = BASE_DIR / "data" / "messages.json"
+
 app.mount("/css", StaticFiles(directory=str(BASE_DIR / "css")), name="css")
 app.mount("/js", StaticFiles(directory=str(BASE_DIR / "js")), name="js")
 app.mount("/images", StaticFiles(directory=str(BASE_DIR / "images")), name="images")
 
-# Templates
 templates = Jinja2Templates(directory=str(BASE_DIR))
 
 @app.get("/", response_class=HTMLResponse)
@@ -54,7 +54,54 @@ async def regimes(request: Request):
 async def contact(request: Request):
     return templates.TemplateResponse("contact.html", {"request": request})
 
-# Health check endpoint
+@app.post("/api/contact")
+async def submit_contact(
+    nom: str = Form(...),
+    email: str = Form(...),
+    sujet: str = Form(...),
+    message: str = Form(...)
+):
+    messages = []
+    if MESSAGES_FILE.exists():
+        with open(MESSAGES_FILE, 'r', encoding='utf-8') as f:
+            try:
+                messages = json.load(f)
+            except:
+                messages = []
+
+    new_message = {
+        "id": len(messages) + 1,
+        "nom": nom,
+        "email": email,
+        "sujet": sujet,
+        "message": message,
+        "date": datetime.now().isoformat(),
+        "lu": False
+    }
+    messages.append(new_message)
+
+    with open(MESSAGES_FILE, 'w', encoding='utf-8') as f:
+        json.dump(messages, f, ensure_ascii=False, indent=2)
+
+    return JSONResponse({
+        "success": True,
+        "message": "Message envoyé avec succes ! Nous vous repondrons sous 48h.",
+        "id": new_message["id"]
+    })
+
+@app.get("/api/messages")
+async def get_messages():
+    if not MESSAGES_FILE.exists():
+        return JSONResponse({"messages": []})
+
+    with open(MESSAGES_FILE, 'r', encoding='utf-8') as f:
+        try:
+            messages = json.load(f)
+        except:
+            messages = []
+
+    return JSONResponse({"messages": messages})
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
