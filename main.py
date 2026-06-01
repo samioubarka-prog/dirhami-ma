@@ -10,6 +10,10 @@ app = FastAPI(title="Dirhami", description="Plateforme financiere Maroc")
 # Determine le repertoire de base
 BASE_DIR = Path(__file__).parent
 
+# Creer les dossiers s'ils n'existent pas (evite l'erreur Render)
+(BASE_DIR / "images").mkdir(exist_ok=True)
+(BASE_DIR / "data").mkdir(exist_ok=True)
+
 # Mount static files
 app.mount("/css", StaticFiles(directory=str(BASE_DIR / "css")), name="css")
 app.mount("/js", StaticFiles(directory=str(BASE_DIR / "js")), name="js")
